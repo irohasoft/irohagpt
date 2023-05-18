@@ -1,0 +1,50 @@
+@charset "utf-8";
+
+/* スマホ用のスタイル */
+@media (max-width: 767px) {
+	.block {
+		display: block; /* 縦に並べる */
+	}
+}
+
+/* タブレットやPC用のスタイル */
+@media (min-width: 768px) {
+	.block {
+		display: inline-block; /* 横に並べる */
+		min-height: 600px;
+	}
+
+	/* ブロックのスタイル */
+	.block {
+		box-sizing: border-box; /* ボーダーやパディングを含めたボックスサイズにする */
+		vertical-align: top; /* 上揃え */
+	}
+
+	.block-template {
+		width: 20%;
+	}
+
+	.block-chat {
+		width: 70%;
+	}
+}
+
+.horizontal {
+	display: flex;
+	align-items: center;
+}
+
+select {
+	margin-right: 10px;
+}
+
+.text-question {
+	min-height: 100px;
+}
+
+.pagination { margin:0 0 5px 0; padding:0; height:2.5em; }
+.pagination a { text-decoration:none; border:solid 1px darkorange; color:darkorange; }
+.pagination a, .pagination span { font-weight:bold; display:block; float:left; margin:0 5px 0 0; padding:.3em .5em; }
+.pagination .current { background:darkorange; color:#fff; border:solid 1px darkorange; }
+.pagination .current.prev, .pagination .current.next { color:#999; border-color:#999; background:#fff; }
+
