@@ -13,7 +13,7 @@ https://docs.irohagpt.com/
 1. フレームワークのソースをダウンロードし、解凍します。  
  https://github.com/cakephp/cakephp/releases/tag/2.10.24
 2. iroha Chat のソースをダウンロードし、解凍します。  
-https://github.com/irohasoft/irohaboard/releases
+https://github.com/irohasoft/irohagpt/releases
 3. app ディレクトリ内のソースを iroha Chat のソースに差し替えます。
 4. データベース(app/Config/database.php)の設定を行います。  
   ※事前に空のデータベースを作成する必要があります。(推奨文字コード : UTF-8)

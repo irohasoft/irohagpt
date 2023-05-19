@@ -12,7 +12,7 @@ https://docs.irohagpt.com/
 1. Download and extract framework's source filese.
 https://github.com/cakephp/cakephp/releases/tag/2.10.24
 2. Download and extract iroha Chat source files.
-https://github.com/irohasoft/irohaboard/releases
+https://github.com/irohasoft/irohagpt/releases
 3. Replace the app directory with the iroha Chat's source files.
 4. Modify the database configuration file (app/Config/database.php).
 Make sure that an empty database is created on the MySQL server.
