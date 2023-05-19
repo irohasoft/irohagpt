@@ -42,10 +42,10 @@
 		<div class="panel-heading"><?= __('チャット'); ?></div>
 		<div class="panel-body">
 			<form method="post" class="template-form">
-				<label>テンプレート</label>
+				<label><?= __('テンプレート'); ?></label>
 				<div class="horizontal">
 				<select class="form-control" id="TemplateId" name="template_id" onchange="changeTemplate($('#TemplateId').val());">
-					<option value="">テンプレートを使用しない</option>
+					<option value=""><?= __('テンプレートを使用しない'); ?></option>
 					<?php foreach ($templates as $row): ?>
 						<option value="<?= h($row['Template']['id']);?>" <?= ($row['Template']['id'] == $template_id) ? 'selected' : ''?>><?= h($row['Template']['title']);?></option>
 					<?php endforeach; ?>
@@ -54,12 +54,12 @@
 				<!--
 				<button class="btn btn-primary" onclick="location.href='<?= Router::url(['controller' => 'messages', 'action' => 'index', Utils::getNewPassword(8)]);?>/' + $('#TemplateId').val()">+ 新規チャット</button>
 				-->
-				<button class="btn btn-default" onclick="location.href='<?= Router::url(['controller' => 'templates', 'action' => 'index']);?>'; return false;">テンプレート管理</button>
+				<button class="btn btn-default" onclick="location.href='<?= Router::url(['controller' => 'templates', 'action' => 'index']);?>'; return false;"><?= __('テンプレート管理'); ?></button>
 				</div>
-				<h5>よく使うテンプレート</h5>
+				<h5><?= __('よく使うテンプレート'); ?></h5>
 				<div>
 					<?php if($template_id){?>
-						<a href="#" onclick="changeTemplate()">×選択を解除</a>　
+						<a href="#" onclick="changeTemplate()">×<?= __('選択を解除'); ?></a>　
 					<?php }?>
 					<?php foreach ($popular_templates as $row): ?>
 						<?php
@@ -71,10 +71,10 @@
 						<a href="#" onclick="changeTemplate(<?= h($row['id']);?>)"><?= $title?></a>　
 					<?php endforeach; ?>
 				</div>
-				<h5>新規チャット</h5>
+				<h5><?= __('新規チャット'); ?></h5>
 				<?php if(($template) && ($template['Template']['before_body'] != '')) {?>
 					<?php
-						$body = $template['Template']['before_body'];
+						$body = h($template['Template']['before_body']);
 						$body = nl2br($body);
 						$body = Utils::convertStringToElement($body);
 					?>
@@ -93,7 +93,7 @@
 				<?php }?>
 			</form>
 			<hr>
-			<label>チャットの履歴</label>
+			<label><?= __('チャットの履歴'); ?></label>
 
 			<ul class="list-group">
 				<?php foreach ($chats as $chat): ?>
