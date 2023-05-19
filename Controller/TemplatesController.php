@@ -4,7 +4,7 @@
  *
  * @author        Kotaro Miura
  * @copyright     2015-2021 iroha Soft, Inc. (https://irohasoft.jp)
- * @link          https://docs.irohagpt.com
+ * @link          https://irohaboard.irohasoft.jp
  * @license       https://www.gnu.org/licenses/gpl-3.0.en.html GPL License
  */
 
@@ -179,6 +179,37 @@ class TemplatesController extends AppController
 		{
 			return $this->redirect(['action' => 'index']);
 		}
+	}
+
+	/**
+	 * テンプレートの削除
+	 * @param int $template_id テンプレートID
+	 */
+	public function delete($template_id = null)
+	{
+		if(Configure::read('demo_mode'))
+			return;
+		
+		$this->Template->id = $template_id;
+		if(!$this->Template->exists())
+		{
+			throw new NotFoundException(__('Invalid template'));
+		}
+
+		$template = $this->Template->findById($template_id);
+		
+		// テンプレートの所有を確認
+		if($template['Template']['user_id'] != $this->readAuthUser('id'))
+		{
+			$this->Flash->error(__('テンプレートを所有していません'));
+			return $this->redirect(['action' => 'index']);
+		}
+		
+		$this->request->allowMethod('post', 'delete');
+		$this->Template->deleteTemplate($template_id);
+		$this->Flash->success(__('テンプレートが削除されました'));
+
+		return $this->redirect(['action' => 'index']);
 	}
 
 	/**
