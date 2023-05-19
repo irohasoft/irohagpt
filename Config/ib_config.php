@@ -50,7 +50,7 @@ $config['form_submit_after'] =
 	.'</div>';
 
 $config['theme_colors'] = [
-	'#3c763d' => 'default',
+	'#31708f' => 'default',
 	'#003f8e' => 'ink blue',
 	'#4169e1' => 'royal blue',
 	'#006888' => 'marine blue',
