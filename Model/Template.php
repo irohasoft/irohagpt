@@ -65,6 +65,29 @@ class Template extends AppModel
 	];
 
 	/**
+	 * 検索用
+	 */
+	public $actsAs = [
+		'Search.Searchable'
+	];
+
+	/**
+	 * 検索条件
+	 * https://github.com/CakeDC/search/blob/master/Docs/Home.md
+	 */
+	public $filterArgs = [
+		'username' => [
+			'type' => 'like',
+			'field' => 'User.username'
+		],
+		'name' => [
+			'type' => 'like',
+			'field' => 'User.name'
+		],
+	];
+
+
+	/**
 	 * テンプレートの並べ替え
 	 * 
 	 * @param array $id_list テンプレートのIDリスト（並び順）
@@ -169,14 +192,6 @@ EOF;
 		$params = [
 			'template_id' => $template_id
 		];
-		
-		// テスト問題の削除
-		$sql = "DELETE FROM ib_contents_questions WHERE content_id IN (SELECT id FROM  ib_contents WHERE template_id = :template_id);";
-		$this->query($sql, $params);
-		
-		// コンテンツの削除
-		$sql = "DELETE FROM ib_contents WHERE template_id = :template_id;";
-		$this->query($sql, $params);
 		
 		// テンプレートの削除
 		$sql = "DELETE FROM ib_templates WHERE id = :template_id;";

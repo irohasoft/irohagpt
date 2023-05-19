@@ -98,7 +98,7 @@ class AppView extends View
 	 */
 	protected function isEditPage()
 	{
-		return (($this->action == 'edit') || ($this->action == 'admin_edit'));
+		return (($this->action == 'edit') || ($this->action == 'admin_edit') || ($this->action == 'admin_master_edit'));
 	}
 
 	/**

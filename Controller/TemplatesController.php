@@ -22,6 +22,7 @@ class TemplatesController extends AppController
 	 */
 	public $components = [
 		'Paginator',
+		'Search.Prg',
 		'Security' => [
 			'csrfUseOnce' => false,
 			'unlockedActions' => ['order']
@@ -47,36 +48,46 @@ class TemplatesController extends AppController
 	 */
 	public function admin_index()
 	{
+		// SearchPluginの呼び出し
+		$this->Prg->commonProcess();
+		
+		
+		// Model の filterArgs に定義した内容にしたがって検索条件を作成
+		$conditions = $this->Template->parseCriteria($this->Prg->parsedParams());
+		
+		$conditions['Template.is_master'] = null;
+		$this->Paginator->settings['conditions'] = $conditions;
+		
 		$this->set('templates', $this->Paginator->paginate());
+	}
+
+	/**
+	 * テンプレート一覧を表示
+	 */
+	public function admin_master()
+	{
+		$conditions['Template.is_master'] = 1;
+		$this->Paginator->settings['conditions'] = $conditions;
+		
+		$this->set('templates', $this->Paginator->paginate());
+		$this->render('admin_index');
+	}
+
+	public function admin_master_add()
+	{
+		$this->edit();
+		$this->render('edit');
+	}
+
+	public function admin_master_edit($template_id = null)
+	{
+		$this->edit($template_id);
+		$this->render('edit');
 	}
 
 	public function admin_edit($template_id = null)
 	{
-		if($this->isEditPage() && !$this->Template->exists($template_id))
-		{
-			throw new NotFoundException(__('Invalid template'));
-		}
-		
-		if($this->request->is(['post', 'put']))
-		{
-			if(Configure::read('demo_mode'))
-				return;
-			
-			if($this->Template->save($this->request->data))
-			{
-				$this->Flash->success(__('テンプレートが保存されました'));
-				return $this->redirect(['action' => 'index']);
-			}
-			else
-			{
-				$this->Flash->error(__('The template could not be saved. Please, try again.'));
-			}
-		}
-		else
-		{
-			$this->request->data = $this->Template->get($template_id);
-		}
-		
+		$this->edit($template_id);
 		$this->render('edit');
 	}
 
@@ -105,13 +116,28 @@ class TemplatesController extends AppController
 			if(Configure::read('demo_mode'))
 				return;
 			
-			// 作成者を設定
-			$this->request->data['Template']['user_id'] = $this->readAuthUser('id');
+			// 作成時の場合、作成者を設定
+			if(!$this->isEditPage())
+				$this->request->data['Template']['user_id'] = $this->readAuthUser('id');
+			
+			// マスターテンプレートの場合、フラグをオンにする
+			$is_master = ($this->action == 'admin_master_add')||($this->action == 'admin_master_edit');
+			
+			if($is_master)
+				$this->request->data['Template']['is_master'] = 1;
 			
 			if($this->Template->save($this->request->data))
 			{
 				$this->Flash->success(__('テンプレートが保存されました'));
-				return $this->redirect(['action' => 'index']);
+				
+				if($is_master)
+				{
+					return $this->redirect(['action' => 'master']);
+				}
+				else
+				{
+					return $this->redirect(['action' => 'index']);
+				}
 			}
 			else
 			{
@@ -139,11 +165,20 @@ class TemplatesController extends AppController
 			throw new NotFoundException(__('Invalid template'));
 		}
 
+		$template = $this->Template->findById($template_id);
+		
 		$this->request->allowMethod('post', 'delete');
 		$this->Template->deleteTemplate($template_id);
 		$this->Flash->success(__('テンプレートが削除されました'));
 
-		return $this->redirect(['action' => 'index']);
+		if($template['Template']['is_master'] == 1)
+		{
+			return $this->redirect(['action' => 'master']);
+		}
+		else
+		{
+			return $this->redirect(['action' => 'index']);
+		}
 	}
 
 	/**
