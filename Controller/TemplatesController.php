@@ -25,6 +25,7 @@ class TemplatesController extends AppController
 		'Search.Prg',
 		'Security' => [
 			'csrfUseOnce' => false,
+			'unlockedFields' => ['ids'],
 			'unlockedActions' => ['order']
 		],
 	];
@@ -32,15 +33,20 @@ class TemplatesController extends AppController
 	public function index()
 	{
 		$user_id = $this->readAuthUser('id');
-		$no_record = '';
 
+		// 個人のテンプレート
 		$templates = $this->fetchTable('Template')->find()
 			->where(['Template.user_id' => $user_id])
 			->order('Template.sort_no asc')
 			->all();
 		
+		// マスターテンプレートの数
+		$master_count = $this->fetchTable('Template')->find()
+			->where(['Template.is_master' => 1])
+			->count();
+		
 		//debug($templates);
-		$this->set(compact('templates', 'no_record'));
+		$this->set(compact('templates', 'master_count'));
 	}
 
 	/**
@@ -109,6 +115,18 @@ class TemplatesController extends AppController
 		if($this->isEditPage() && !$this->Template->exists($template_id))
 		{
 			throw new NotFoundException(__('Invalid template'));
+		}
+		
+		// 所有者の確認（利用者側の編集画面のみ）
+		if($this->isEditPage() && !$this->isAdminPage())
+		{
+			$template = $this->Template->get($template_id);
+			
+			// テンプレートの所有者と一致しない場合、アクセスを拒否
+			if($template['Template']['user_id'] != $this->readAuthUser('id'))
+			{
+				throw new NotFoundException(__('Invalid access'));
+			}
 		}
 		
 		if($this->request->is(['post', 'put']))
@@ -225,5 +243,40 @@ class TemplatesController extends AppController
 			$this->Template->setOrder($this->data['id_list']);
 			return "OK";
 		}
+	}
+
+	public function copy()
+	{
+		$templates = $this->Template->find()->where(['Template.is_master' => 1])->all();
+		
+		if($this->request->is(['post', 'put']))
+		{
+			$ids = $this->getData('Template')['ids'];
+			
+			$list = explode(',', $ids);
+			
+			foreach($list as $template_id)
+			{
+				$data = $this->Template->get($template_id);
+				
+				if($data['Template']['is_master'] != 1)
+					continue;
+				
+				$data['Template']['id'] = null;
+				$data['Template']['user_id'] = $this->readAuthUser('id');
+				$data['Template']['sort_no'] = 0;
+				$data['Template']['is_master'] = null;
+				$data['Template']['created'] = null;
+				$data['Template']['modified'] = null;
+				
+				$this->Template->save($data);
+				
+				$this->Flash->success(__('テンプレートをコピーしました'));
+				
+				return $this->redirect(['action' => 'index']);
+			}
+		}
+		
+		$this->set('templates', $templates);
 	}
 }

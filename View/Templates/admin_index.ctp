@@ -1,11 +1,16 @@
 <?= $this->element('admin_menu');?>
 <div class="admin-templates-index">
+	<?php if($this->action == 'admin_master') {?>
+	<div class="ib-page-title"><?= __('マスターテンプレート一覧'); ?></div>
+	<div class="buttons_container">
+		<button type="button" class="btn btn-primary btn-add" onclick="location.href='<?= Router::url(['action' => 'master_add']) ?>'">+ 追加</button>
+	</div>
+	<?php }else{?>
 	<div class="ib-page-title"><?= __('テンプレート一覧'); ?></div>
 	<div class="buttons_container">
-		<?php if($this->action == 'admin_master') {?>
-		<button type="button" class="btn btn-primary btn-add" onclick="location.href='<?= Router::url(['action' => 'master_add']) ?>'">+ 追加</button>
-		<?php }?>
+		<button type="button" class="btn btn-default" onclick="location.href='<?= Router::url(['action' => 'master']) ?>'">マスターテンプレート</button>
 	</div>
+	<?php }?>
 	
 	<?php if(($this->action != 'admin_master')) {?>
 	<br>

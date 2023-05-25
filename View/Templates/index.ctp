@@ -68,9 +68,13 @@
 		<div class="panel-heading"><?= __('テンプレート一覧'); ?></div>
 		<div class="panel-body">
 			<div class="buttons_container">
+				<?php if($master_count > 0) {?>
+				<button type="button" class="btn btn-default" onclick="location.href='<?= Router::url(['action' => 'copy']) ?>'"><?= __('マスターテンプレートからコピー'); ?></button>
+				<?php }?>
 				<button type="button" class="btn btn-primary btn-add" onclick="location.href='<?= Router::url(['action' => 'add']) ?>'">+ 追加</button>
 			</div>
 
+			<?php if(count($templates) > 0) {?>
 			<div class="alert alert-warning"><?= __('ドラッグアンドドロップでテンプレートの並び順が変更できます。'); ?></div>
 			<ul id='sortable-table' class="list-group">
 				<?php foreach ($templates as $template): ?>
@@ -91,6 +95,9 @@
 				</div>
 				<?php endforeach; ?>
 			</ul>
+			<?php } else {?>
+			<?= __('テンプレートは存在しません。'); ?>
+			<?php }?>
 		</div>
 	</div>
 

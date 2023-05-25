@@ -1,5 +1,27 @@
 <div class="admin-templates-edit">
-<?= $this->Html->link(__('<< 戻る'), ['controller' => 'homes', 'action' => 'index'])?>
+<?php
+// 利用者側
+$param = ['controller' => 'homes', 'action' => 'index'];
+
+// 管理者側
+if($this->isAdminPage())
+{
+	// マスターテンプレートの場合
+	if(
+		($this->action == 'admin_master')||
+		($this->action == 'admin_master_edit')
+	)
+	{
+		$param = ['action' => 'master'];
+	}
+	else
+	{
+		$param = ['action' => 'index'];
+	}
+}
+
+?>
+<?= $this->Html->link(__('<< 戻る'), $param)?>
 	<div class="panel panel-default">
 		<div class="panel-heading">
 			<?= $this->isEditPage() ? __('編集') :  __('新規テンプレート'); ?>
