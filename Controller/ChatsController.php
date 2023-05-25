@@ -52,11 +52,11 @@ class ChatsController extends AppController
 			$params = json_encode([
 				'model'			=> Configure::read('model'),
 				'messages'		=> $messages,
-				'temperature'	=> floatval(1.0),
-				'max_tokens'	=> floatval(1024),
-				'top_p'			=> floatval(1.0),
-				'frequency_penalty'	=> floatval(0),
-				'presence_penalty'	=> floatval(0)
+				'temperature'	=> floatval(Configure::read('temperature')),
+				'max_tokens'	=> floatval(Configure::read('max_tokens')),
+				'top_p'			=> floatval(Configure::read('top_p')),
+				'frequency_penalty'	=> floatval(Configure::read('frequency_penalty')),
+				'presence_penalty'	=> floatval(Configure::read('presence_penalty'))
 			]);
 
 			//debug($params);
@@ -188,11 +188,11 @@ class ChatsController extends AppController
 			$params = json_encode([
 				'model'			=> Configure::read('model'),
 				'messages'		=> $messages,
-				'temperature'	=> floatval(1.0),
-				'max_tokens'	=> floatval(1024),
-				'top_p'			=> floatval(1.0),
-				'frequency_penalty'	=> floatval(0),
-				'presence_penalty'	=> floatval(0)
+				'temperature'	=> floatval(Configure::read('temperature')),
+				'max_tokens'	=> floatval(Configure::read('max_tokens')),
+				'top_p'			=> floatval(Configure::read('top_p')),
+				'frequency_penalty'	=> floatval(Configure::read('frequency_penalty')),
+				'presence_penalty'	=> floatval(Configure::read('presence_penalty'))
 			]);
 
 			$curl = curl_init('https://api.openai.com/v1/chat/completions');
