@@ -104,7 +104,9 @@ function sendToAPI()
 			{
 				$('.stage').append(
 					'<div class="alert alert-danger">' + 
-					data.error.message +
+					'ChatGPT API で以下のエラーが発生いたしました。<br>' + 
+					'エラーの種類 : ' + data.error.type + '<br>' +
+					'エラーの内容 : ' + data.error.message +
 					'</div>'
 				);
 			}
