@@ -212,5 +212,5 @@ CREATE TABLE IF NOT EXISTS `ib_cake_sessions` (
 
 INSERT INTO `ib_settings` VALUES ('1', 'title', 'システム名', 'iroha Chat');
 INSERT INTO `ib_settings` VALUES ('2', 'copyright', 'コピーライト', 'Copyright (C) 2022-2023 iroha Soft Co.,Ltd. All rights reserved.');
-INSERT INTO `ib_settings` VALUES ('3', 'color', 'テーマカラー', '#3c763d');
+INSERT INTO `ib_settings` VALUES ('3', 'color', 'テーマカラー', '#31708f');
 INSERT INTO `ib_settings` VALUES ('4', 'information', 'お知らせ', '');
