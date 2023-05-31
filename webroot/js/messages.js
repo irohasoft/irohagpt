@@ -1,7 +1,9 @@
 $(document).ready(function()
 {
+	// プロンプトにフォーカスをセット
 	$('.text-question').focus();
 	
+	// 改行時にプロンプトを送信
 	$(".text-question").keydown(function(e)
 	{
 		if(e.keyCode === 13 && !e.shiftKey)
@@ -20,6 +22,7 @@ $(document).ready(function()
 		}
 	});
 
+	// 回答に markdown を適用
 	$('.msg-assistant').each(function(index)
 	{
 		var html = marked.parse($(this).text(),
@@ -31,6 +34,7 @@ $(document).ready(function()
 		$(this).html(html);
 	});
 
+	// プロンプトの初期値が存在する場合、APIに送信
 	if(
 		($('.text-question').length > 0) &&
 		($('.text-question').val() != '')
@@ -127,12 +131,14 @@ function sendToAPI()
 	return false;
 }
 
+// APIに「続けてください」を送信
 function continueToChat()
 {
 	$('.text-question').val('続けてください');
 	sendToAPI();
 }
 
+// チャットのタイトルを更新
 function updateTitle()
 {
 	const messages = getMessages();
@@ -161,6 +167,7 @@ function updateTitle()
 	return false;
 }
 
+// プロンプトを取得
 function getQuestion()
 {
 	// 質問
@@ -179,6 +186,7 @@ function getQuestion()
 	return question;
 }
 
+// 過去のチャットの履歴を取得
 function getMessages()
 {
 	var messages = [];
@@ -201,24 +209,13 @@ function getMessages()
 	return messages;
 }
 
-function chageTemplate()
-{
-	location.href = MESSAGES_URL +'/' + $('#TemplateGroupId').val();
-}
-
-function sanitizeHTML(text)
-{
-	var element = document.createElement('div');
-	element.innerText = text;
-	var sanitizedHTML = element.innerHTML.replace(/\n/g, "<br>");
-	return sanitizedHTML;
-}
-
+// ローディング画面を表示
 function showLoadingScreen()
 {
 	$('#loading').css('display', 'flex');
 }
 
+// ローディング画面を非表示
 function hideLoadingScreen()
 {
 	$('#loading').css('display', 'none');
