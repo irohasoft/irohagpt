@@ -88,6 +88,7 @@ function sendToAPI()
 			
 			if(data.httpcode == 200)
 			{
+				// ChatGPTの回答を出力
 				var text = marked.parse(data['message'], {
 					breaks: true,
 					sanitize: true
@@ -102,13 +103,38 @@ function sendToAPI()
 			}
 			else
 			{
-				$('.stage').append(
-					'<div class="alert alert-danger">' + 
-					'ChatGPT API で以下のエラーが発生いたしました。<br>' + 
-					'エラーの種類 : ' + data.error.type + '<br>' +
-					'エラーの内容 : ' + data.error.message +
-					'</div>'
-				);
+				// エラー処理
+				
+				// トークン数上限オーバーの場合
+				if(data.error.code == 'context_length_exceeded')
+				{
+					$('.stage').append(
+						'<div class="alert alert-danger">' + 
+						'処理できる文字数の上限を超えました。新しくチャットを作成してください。' + 
+						'</div>'
+					);
+				}
+				// APIキーが無効の場合
+				else if(data.error.code == 'invalid_api_key')
+				{
+					$('.stage').append(
+						'<div class="alert alert-danger">' + 
+						'設定されているAPIキーが無効です。' + 
+						'</div>'
+					);
+				}
+				// その他のエラーの場合
+				else
+				{
+					$('.stage').append(
+						'<div class="alert alert-danger">' + 
+						'ChatGPT API で以下のエラーが発生いたしました。<br>' + 
+						'エラーの種類 : ' + data.error.type + '<br>' +
+						'エラーコード : ' + data.error.code + '<br>' +
+						'エラーの内容 : ' + data.error.message +
+						'</div>'
+					);
+				}
 			}
 
 			$('.btn-primary').prop('disabled', false);
