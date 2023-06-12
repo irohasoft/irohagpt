@@ -47,10 +47,8 @@
 	<?php foreach ($templates as $template): ?>
 	<tr>
 		<td>
-		<?php 
-			echo $template['Template']['title'];
-			echo $this->Form->hidden('id', ['id'=>'', 'class'=>'template_id', 'value'=>$template['Template']['id']]);
-		?>
+			<?= h($template['Template']['title']); ?>&nbsp;
+			<?= $this->Form->hidden('id', ['id'=>'', 'class'=>'template_id', 'value'=>$template['Template']['id']]); ?>
 		</td>
 		<td><?= h($template['User']['username']); ?>&nbsp;</td>
 		<td><?= h($template['User']['name']); ?>&nbsp;</td>
