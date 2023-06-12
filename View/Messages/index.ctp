@@ -9,6 +9,21 @@
 </script>
 <?php $this->end(); ?>
 <?= $this->Html->script('messages.js?20230502'); ?>
+<?php $this->start('css-embedded'); ?>
+<style>
+<?php if($this->isAdminPage()) { // 管理システムからの表示の場合、メニューを非表示 ?>
+.ib-navi-item
+{
+	display					: none;
+}
+
+.ib-logo a
+{
+	pointer-events			: none;
+}
+<?php }?>
+</style>
+<?php $this->end(); ?>
 <div class="messages-index">
 	<div class="ib-breadcrumb">
 	<?php
