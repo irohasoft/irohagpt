@@ -1,1 +1,1 @@
-<?= $this->fetch('chat'); ?>
+<?= $this->fetch('content'); ?>

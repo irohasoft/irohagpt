@@ -1,2 +1,2 @@
 <?= $scripts_for_layout; ?>
-<script type="text/javascript"><?= $this->fetch('chat'); ?></script>
+<script type="text/javascript"><?= $this->fetch('content'); ?></script>

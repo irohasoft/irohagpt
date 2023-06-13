@@ -8,6 +8,6 @@ endif;
 
 echo $this->Rss->document(
 	$this->Rss->channel(
-		[], $channel, $this->fetch('chat')
+		[], $channel, $this->fetch('content')
 	)
 );

@@ -18,9 +18,9 @@
 </head>
 <body>
 	<div id="container">
-		<div id="chat">
+		<div id="content">
 			<?= $this->Session->flash(); ?>
-			<?= $this->fetch('chat'); ?>
+			<?= $this->fetch('content'); ?>
 		</div>
 	</div>
 	<?= $this->element('sql_dump'); ?>

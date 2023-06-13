@@ -5,7 +5,7 @@
 <title><?= $pageTitle; ?></title>
 
 <?php if (!Configure::read('debug')): ?>
-<meta http-equiv="Refresh" chat="<?= $pause; ?>;url=<?= $url; ?>"/>
+<meta http-equiv="Refresh" content="<?= $pause; ?>;url=<?= $url; ?>"/>
 <?php endif ?>
 <style><!--
 P { text-align:center; font:bold 1.1em sans-serif }
