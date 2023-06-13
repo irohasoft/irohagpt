@@ -13,6 +13,7 @@
 </script>
 <?php $this->end(); ?>
 <div class="admin-settings-index">
+	<div class="text-right"><a href="https://docs.irohagpt.com/"><b>iroha Chat 公式サイト</b></a></div>
 	<div class="panel panel-default">
 		<div class="panel-heading">
 			<?= __('システム設定'); ?>

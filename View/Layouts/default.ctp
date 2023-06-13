@@ -103,7 +103,7 @@
 	
 	<?php if(isset($loginedUser)) {?>
 	<div class="irohasoft">
-		Powered by ChatGPT API
+		Powered by <a href="https://docs.irohagpt.com/"><?= APP_NAME; ?></a> and ChatGPT API
 	</div>
 	<?php }?>
 	
