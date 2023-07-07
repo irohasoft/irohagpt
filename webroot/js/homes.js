@@ -2,19 +2,8 @@ $(document).ready(function()
 {
 	$('.text-question').focus();
 
-	$(".text-question").keydown(function(e){
-		if (e.keyCode === 13 && !e.shiftKey) { // Enterキーのみの場合はフォームをPOSTする
-			e.preventDefault(); // フォームのPOSTをキャンセル
-			sendToAPI(); // フォームをPOSTする
-		} else if (e.keyCode === 13 && e.shiftKey) { // Shift+Enterキーの場合は改行する
-			e.preventDefault(); // デフォルトの改行処理をキャンセル
-			var start = this.selectionStart;
-			var end = this.selectionEnd;
-			var value = $(this).val();
-			$(this).val(value.substring(0, start) + "\n" + value.substring(end));
-			this.selectionStart = this.selectionEnd = start + 1; // キャレットを改行した場所に移動する
-		}
-	});
+	$('.text-question').keydown(textOnKeydown);
+	$('.control-text').keydown(textOnKeydown);
 
 	$('.list-group').pagination({
 		displayItemCount : 10,
@@ -26,10 +15,25 @@ $(document).ready(function()
 	});
 });
 
+function textOnKeydown(e)
+{
+	if (e.keyCode === 13 && !e.shiftKey) { // Enterキーのみの場合はフォームをPOSTする
+		e.preventDefault(); // フォームのPOSTをキャンセル
+		sendToAPI(); // フォームをPOSTする
+	} else if (e.keyCode === 13 && e.shiftKey) { // Shift+Enterキーの場合は改行する
+		e.preventDefault(); // デフォルトの改行処理をキャンセル
+		var start = this.selectionStart;
+		var end = this.selectionEnd;
+		var value = $(this).val();
+		$(this).val(value.substring(0, start) + "\n" + value.substring(end));
+		this.selectionStart = this.selectionEnd = start + 1; // キャレットを改行した場所に移動する
+	}
+}
+
 // APIに送信
 function sendToAPI()
 {
-	if($('.text-question').val() == '')
+	if(getQuestion() == '')
 	{
 		alert('質問が入力されていません');
 		return;
