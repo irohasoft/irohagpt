@@ -39,7 +39,7 @@ class Message extends AppModel
 	public $belongsTo = [
 		'Chat' => [
 			'className' => 'Chat',
-			'foreignKey' => 'chat_id',
+			'foreignKey' => 'chat_key',
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''
