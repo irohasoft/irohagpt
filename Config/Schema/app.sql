@@ -58,6 +58,7 @@ CREATE TABLE IF NOT EXISTS `ib_messages` (
   `user_id` int(11) DEFAULT NULL,
   `elapsed_time` decimal(10,2) DEFAULT NULL,
   `message` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `image_urls` varchar(2000) DEFAULT NULL,
   `role` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),

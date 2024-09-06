@@ -15,7 +15,9 @@ pre {
 
 /** Layout **/
 #container {
+/*
 	text-align: left;
+*/
 }
 
 /** Tables **/
@@ -539,7 +541,6 @@ body
 
 #content
 {
-	text-align			: left;
 	min-height			: 600px;
 	max-width			: 1200px;
 	margin				: auto;
@@ -562,10 +563,6 @@ div.buttons_container
 	width				: 95%;
 	max-width			: 1150px;
 	z-index				: 999999;
-}
-
-#header
-{
 }
 
 .form-signin
@@ -889,6 +886,13 @@ form .required .control-label:after
 .form-horizontal .control-label
 {
 	padding-top			: 5px;
+}
+
+.uploaded-image
+{
+	max-width: 200px;
+	max-height: 200px;
+	margin-right: 10px;
 }
 
 /* スマートフォン用 */

@@ -73,4 +73,107 @@ class HomesController extends AppController
 		
 		$this->set(compact('templates', 'template', 'template_id', 'popular_templates', 'chats', 'no_record', 'info', 'infos', 'no_info'));
 	}
+
+	/**
+	 * 送信された画像を保存
+	 *
+	 * @return string アップロードした画像のURL(JSON形式)
+	 */
+	public function upload_image()
+	{
+		$this->autoRender = FALSE;
+		
+		if($this->request->is('ajax'))
+		{
+			App::import ('Vendor', 'FileUpload');
+			$fileUpload = new FileUpload();
+			
+			// アップロード可能な拡張子とファイルサイズを指定
+			$upload_extensions = (array)Configure::read('upload_image_extensions');
+			$upload_maxsize = Configure::read('upload_image_maxsize');
+			
+			$fileUpload->setExtension($upload_extensions);
+			$fileUpload->setMaxSize($upload_maxsize);
+			$fileUpload->readFile($this->getParam('form')['file']); // ファイルの読み込み
+			
+			$str = substr(str_shuffle('abcdefghijklmnopqrstuvwxyz'), 0, 4);
+			
+			// ファイル名：YYYYMMDDHHNNSS形式＋ランダムな4桁の文字列＋"既存の拡張子"
+			$new_name = date('YmdHis').$str.$fileUpload->getExtension($fileUpload->getFileName());
+
+			$file_name = WWW_ROOT.'uploads'.DS.$new_name; // ファイルのパス
+			$file_url = Router::url('/uploads/'.$new_name, true); // ファイルのURL (https://xxxx 形式)
+
+			$result = $fileUpload->saveFile($file_name); // ファイルの保存
+			
+			if ($result) {
+				// 画像のリサイズ処理
+				$this->resizeImage($file_name, 1024, 1024);
+				
+				$response = ['imageUrl' => $file_url];
+			} else {
+				$response = ['error' => true];
+			}
+			
+			// 画像のURLをJSON形式で出力
+			return json_encode($response);
+		}
+
+		return 'not found';
+	}
+
+	/**
+	 * 画像をリサイズする
+	 *
+	 * @param string $file_path 画像ファイルのパス
+	 * @param int $max_width 最大幅
+	 * @param int $max_height 最大高さ
+	 */
+	private function resizeImage($file_path, $max_width, $max_height) {
+		list($width, $height, $type) = getimagesize($file_path);
+		
+		// アスペクト比を計算
+		$aspect_ratio = $width / $height;
+
+		if ($width > $max_width || $height > $max_height) {
+			if ($max_width / $max_height > $aspect_ratio) {
+				$new_width = $max_height * $aspect_ratio;
+				$new_height = $max_height;
+			} else {
+				$new_width = $max_width;
+				$new_height = $max_width / $aspect_ratio;
+			}
+
+			$new_image = imagecreatetruecolor($new_width, $new_height);
+
+			switch ($type) {
+				case IMAGETYPE_JPEG:
+					$source = imagecreatefromjpeg($file_path);
+					break;
+				case IMAGETYPE_PNG:
+					$source = imagecreatefrompng($file_path);
+					break;
+				case IMAGETYPE_GIF:
+					$source = imagecreatefromgif($file_path);
+					break;
+			}
+
+			imagecopyresampled($new_image, $source, 0, 0, 0, 0, $new_width, $new_height, $width, $height);
+
+			switch ($type) {
+				case IMAGETYPE_JPEG:
+					imagejpeg($new_image, $file_path, 90);
+					break;
+				case IMAGETYPE_PNG:
+					imagepng($new_image, $file_path);
+					break;
+				case IMAGETYPE_GIF:
+					imagegif($new_image, $file_path);
+					break;
+			}
+
+			imagedestroy($new_image);
+			imagedestroy($source);
+		}
+	}
 }

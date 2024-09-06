@@ -83,3 +83,12 @@ if (!defined('APP_NAME')) {
 }
 
 $config['prompt_max']  = 4000;
+
+$config['upload_image_extensions'] = [
+	'.png',
+	'.gif',
+	'.jpg',
+	'.jpeg',
+];
+
+$config['upload_image_maxsize'] = 1024 * 1024 *  2;

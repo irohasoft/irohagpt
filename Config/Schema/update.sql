@@ -8,3 +8,4 @@ SET FOREIGN_KEY_CHECKS=1;
 # 3. #を元の状態に戻し、ファイルを保存します。
 #UPDATE ib_users SET `password` = SHA1(CONCAT('%salt%', '新しいパスワード')) WHERE username = '復旧したい管理者のログインID';
 
+ALTER TABLE ib_messages ADD COLUMN image_urls varchar(2000) DEFAULT NULL AFTER message;

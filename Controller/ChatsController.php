@@ -43,7 +43,12 @@ class ChatsController extends AppController
 			
 			$messages = json_decode($_POST['messages'], true);
 			$last_message = end($messages);
-			
+
+			/*
+			debug($messages);
+			exit;
+			*/
+
 			$header = [
 				'Authorization: Bearer '.Configure::read('api_key'),
 				'Content-type: application/json',
@@ -59,7 +64,10 @@ class ChatsController extends AppController
 				'presence_penalty'	=> floatval(Configure::read('presence_penalty'))
 			]);
 
-			//debug($params);
+			/*
+			debug($params);
+			exit;
+			*/
 
 			$curl = curl_init('https://api.openai.com/v1/chat/completions');
 
@@ -81,6 +89,8 @@ class ChatsController extends AppController
 			$response = curl_exec($curl);
 			$httpcode = curl_getinfo($curl, CURLINFO_RESPONSE_CODE);
 			$message  = '';
+			$text = '';
+			$image_urls = [];
 			$elapsed_time = 0;
 			$error = null;
 
@@ -94,11 +104,27 @@ class ChatsController extends AppController
 					$message .= $c['message']['content'];
 				}
 
+
+				if(is_array($last_message['content']))
+				{
+					$text = $last_message['content'][0]['text'];
+					foreach($last_message['content'] as $content)
+					{
+						if($content['type'] == 'image_url')
+							$image_urls[] = $content['image_url']['url'];
+					}
+				}
+				else
+				{
+					$text =  $last_message['content'];
+				}
+				
 				// ユーザの質問
 				$data = [
 					'chat_key' => $chat_key,
 					'user_id' => $user_id,
-					'message' => $last_message['content'],
+					'message' => $text,
+					'image_urls' => (count($image_urls) > 0) ? json_encode($image_urls) : null,
 					'role' => 'user',
 				];
 
@@ -160,6 +186,8 @@ class ChatsController extends AppController
 				'error' => $error,
 			]);
 		}
+
+		return false;
 	}
 
 	/**

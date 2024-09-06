@@ -56,10 +56,10 @@ function sendToAPI()
 	// ローディング画面を表示
 	showLoadingScreen();
 	
-	const question = getQuestion(); // 新しい質問
+	const content = getQuestion(); // 新しい質問
 	const messages = getMessages(); // 対話の履歴
 	
-	messages.push({role: 'user', content: question});
+	messages.push({role: 'user', content: content});
 	
 	const data = new FormData();
 
@@ -67,11 +67,37 @@ function sendToAPI()
 	data.append('template_id', TEMPLATE_ID);
 	data.append('messages', JSON.stringify(messages));
 
-	$('.stage').append(
-		'<div class="alert alert-success msg msg-user">' + 
-		CU.getBrHTML(question) +
-		'</div>'
-	);
+	var text = '';
+
+	// 画像付きでない場合テキストを表示
+	if(typeof content === 'string')
+	{
+		$('.stage').append(
+			'<div class="alert alert-success msg msg-user">' + 
+			CU.getBrHTML(content) +
+			'</div>'
+		);
+	}
+	else
+	{
+		$('.stage').append(
+			'<div class="alert alert-success msg msg-user">' + 
+			CU.getBrHTML(content[0]['text']) +
+			'</div>'
+		);
+
+		var imgTag = '<div style="text-align:right;">';
+
+		// 画像を追加
+		for(var i = 1; i < content.length; i++)
+		{
+			imgTag += '<div class="uploaded-image-container"><img src="' + content[i]['image_url']['url'] + '" alt="アップロードされた画像" class="uploaded-image">';
+		}
+
+		imgTag += '</div>';
+		$('.stage').append(imgTag);
+	}
+
 
 	$('.btn-primary').prop('disabled', true);
 	$('.text-question').prop('disabled', true);
@@ -137,9 +163,12 @@ function sendToAPI()
 				}
 			}
 
+			// 質問および画像の選択をクリアする
 			$('.btn-primary').prop('disabled', false);
 			$('.text-question').prop('disabled', false);
 			$('.text-question').val('');
+			$('.uploaded-images-container').empty();
+			$('#hidImageUrls').val('[]');
 			hideLoadingScreen();
 			
 			setTimeout("$('.text-question').focus();", 500);
@@ -199,19 +228,39 @@ function updateTitle()
 function getQuestion()
 {
 	// 質問
-	let question = $('.text-question').val();
-	
+	let content = $('.text-question').val();
+
 	if(($('.msg').length == 0) && $('.before-body').text() != '')
 	{
-		question = $('.before-body').text() + '\n\n' + question;
+		content = $('.before-body').text() + '\n\n' + content;
 	}
 
 	if(($('.msg').length == 0) && $('.after-body').text() != '')
 	{
-		question +=  '\n\n' + $('.before-body').text();
+		content +=  '\n\n' + $('.before-body').text();
 	}
 	
-	return question;
+	if($('#hidImageUrls').val())
+	{
+		let imageUrls = JSON.parse($('#hidImageUrls').val());
+		content = [
+			{
+				type: 'text',
+				text: content
+			}
+		];
+		
+		imageUrls.forEach(url => {
+			content.push({
+				type: 'image_url',
+				image_url: {
+					url: url
+				}
+			});
+		});
+	}
+
+	return content;
 }
 
 // 過去のチャットの履歴を取得
@@ -224,13 +273,32 @@ function getMessages()
 	{
 		if($(this).hasClass('msg-user'))
 		{
-			messages.push({role: 'user', content: $(this).text()});
-			//messages += 'user##SEPA##' + $(this).text() + '##BLOCK##';
-		}
-		else
-		{
+			var content = $(this).text();
+			var imageUrls = $(this).data('image-urls'); // 画像URLを取得
+
+			if (imageUrls) {
+				// 画像URLが存在する場合、新しい形式でメッセージを追加
+				messages.push({
+					role: 'user',
+					content: [
+						{
+							type: 'text',
+							text: content
+						},
+						{
+							type: 'image_url',
+							image_url: {
+								url: imageUrl
+							}
+						}
+					]
+				});
+			} else {
+				// 画像URLが存在しない場合、通常のテキストメッセージとして追加
+				messages.push({role: 'user', content: content});
+			}
+		} else {
 			messages.push({role: 'assistant', content: $(this).text()});
-			//messages += 'assistant##SEPA##' + $(this).text() + '##BLOCK##';
 		}
 	});
 

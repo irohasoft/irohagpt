@@ -4,9 +4,11 @@
 <script>
 	var MESSAGE_URL  = '<?= Router::url(['controller' => 'messages', 'action' => 'index']);?>/index/';
 	var CHAT_DELETE_URL  = '<?= Router::url(['controller' => 'chats', 'action' => 'delete'])?>';
+	var IMAGE_UPLOAD_URL	= '<?= Router::url(['controller' => 'homes', 'action' => 'upload_image'])?>';
 </script>
 <?php $this->end(); ?>
-<?= $this->Html->script('homes.js');?>
+<?= $this->Html->script('prompt.js?20240901');?>
+<?= $this->Html->script('homes.js?20240901');?>
 <div class="users-templates-index">
 	<div class="panel panel-success">
 		<div class="panel-heading"><?= __('お知らせ'); ?></div>
@@ -80,8 +82,8 @@
 					?>
 					<div class="well before-body"><?= $body?></div>
 				<?php }?>
-				<textarea class="form-control text-question" name="first_message" maxlength="<?= Configure::read('prompt_max') ?>" type="text"="required" placeholder="質問を入力し、エンターキーを押下してください。
-改行する場合は、Shift+エンターキーを押下してください。"><?= ($template) ? $template['Template']['body'] : ''?></textarea>
+				<!--prompt.ctp-->
+				<?= $this->element('prompt', ['message' => (($template) ? $template['Template']['body'] : ''), 'image_urls' => null]);?>
 				<?php if(($template) && ($template['Template']['after_body'] != '')) {?>
 					<div class="well after-body">
 					<?php

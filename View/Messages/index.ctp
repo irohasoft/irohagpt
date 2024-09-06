@@ -6,9 +6,11 @@
 	var CHAT_KEY = '<?= $chat_key;?>';
 	var TEMPLATE_ID = '<?= $template_id;?>';
 	var MESSAGE_URL = '<?= Router::url(['controller' => 'messages', 'action' => 'index', 'admin' => false, Utils::getNewPassword(8)]); ?>';
+	var IMAGE_UPLOAD_URL = '<?= Router::url(['controller' => 'homes', 'action' => 'upload_image'])?>';
 </script>
 <?php $this->end(); ?>
-<?= $this->Html->script('messages.js?20230502'); ?>
+<?= $this->Html->script('prompt.js?20240901');?>
+<?= $this->Html->script('messages.js?20240901'); ?>
 <?php $this->start('css-embedded'); ?>
 <style>
 <?php if($this->isAdminPage()) { // 管理システムからの表示の場合、メニューを非表示 ?>
@@ -56,19 +58,49 @@
 				</div>
 
 				<?php foreach ($messages as $message): ?>
-				<div class="alert alert-<?= ($message['Message']['role'] == 'user') ? 'success' : 'warning' ; ?> msg msg-<?= $message['Message']['role']; ?>"><?= $message['Message']['message']; ?></div>
+				<div class="alert alert-<?= ($message['Message']['role'] == 'user') ? 'success' : 'warning' ; ?> msg msg-<?= $message['Message']['role']; ?>"
+					 <?php if (!empty($message['Message']['image_urls'])): ?>
+					 data-image-url="<?= h($message['Message']['image_urls']); ?>"
+					 <?php endif; ?>>
+					<?= nl2br(h($message['Message']['message'])); ?>
+				</div>
+				<?php if ($message['Message']['role'] == 'assistant') {?>
+				<div class="elapsed-time"><?= $message['Message']['elapsed_time'] ?>秒</div>
+				<?php }?>
 				<?php endforeach; ?>
 				<button class="btn btn-default" onclick="continueToChat();">続けてください</button>
 				<div class="form-group">
 					<div class="col">
-						<textarea class="form-control text-question" maxlength="<?= Configure::read('prompt_max') ?>" type="text"="required" placeholder="質問を入力し、エンターキーを押下してください。
-改行する場合は、Shift+エンターキーを押下してください。"><?= $first_message?></textarea>
+						<!--prompt.ctp-->
+						<?= $this->element('prompt', ['message' => $first_message, 'image_urls' => h($first_image_urls)]);?>
 					</div>
 				</div>
 			<?php } else {?>
 				<div class="stage">
 					<?php foreach ($messages as $message): ?>
-						<div class="alert alert-<?= ($message['Message']['role'] == 'user') ? 'success' : 'warning' ; ?> msg msg-<?= $message['Message']['role']; ?>"><?= nl2br(h($message['Message']['message'])); ?></div>
+						<div class="alert alert-<?= ($message['Message']['role'] == 'user') ? 'success' : 'warning' ; ?> msg msg-<?= $message['Message']['role']; ?>"
+							 <?php if (!empty($message['Message']['image_urls'])): ?>
+							 data-image-url="<?= h($message['Message']['image_urls']); ?>"
+							 <?php endif; ?>><?= nl2br(h($message['Message']['message'])); ?>
+						</div>
+						<?php
+						$img_tag = '';
+
+						// 画像を表示
+						if($message['Message']['image_urls'])
+						{
+							$image_urls = json_decode($message['Message']['image_urls']);
+							$img_tag = '<div class="text-right">';
+
+							foreach ($image_urls as $image_url)
+							{
+								$img_tag .= '<img src ="'.h($image_url).'" class="uploaded-image"></div>';
+							}
+
+							$img_tag .= '</div>';
+					}
+						?>
+						<?= $img_tag ?>
 						<?php if ($message['Message']['role'] == 'assistant') {?>
 						<div class="elapsed-time"><?= $message['Message']['elapsed_time'] ?>秒</div>
 						<?php }?>
@@ -76,8 +108,8 @@
 				</div>
 				<?php if(!$this->isAdminPage()) {?>
 				<button class="btn btn-default" onclick="continueToChat();">続けてください</button>
-				<textarea class="form-control text-question" maxlength="<?= Configure::read('prompt_max') ?>" type="text"="required" placeholder="質問を入力し、エンターキーを押下してください。
-改行する場合は、Shift+エンターキーを押下してください。"></textarea>
+				<!--prompt.ctp-->
+				<?= $this->element('prompt', ['message' => '', 'image_urls' => '']);?>
 				<?php }?>
 			<?php }?>
 		</div>

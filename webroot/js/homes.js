@@ -48,27 +48,41 @@ function sendToAPI()
 	$('.template-form').submit(); // フォームをPOSTする
 }
 
+/**
+ * テンプレートを変更し、フォームを送信
+ * @param {string} template_id - 選択されたテンプレートのID
+ */
 function changeTemplate(template_id)
 {
-	$('#hidTemplateId').val(template_id);
-	$('.template-form').submit();
+	$('#hidTemplateId').val(template_id);  // 隠しフィールドにテンプレートIDをセット
+	$('.template-form').submit();  // フォームを送信
 }
 
+/**
+ * チャットを開始
+ * 注意: template_id変数がグローバルスコープで定義されていることを前提としています
+ */
 function startChat()
 {
-	$('#hidTemplateId').val(template_id);
-	$('.template-form').submit();
+	$('#hidTemplateId').val(template_id);  // 隠しフィールドにテンプレートIDをセット
+	$('.template-form').submit();  // フォームを送信
 }
 
+/**
+ * 質問テキストを取得し、必要に応じて前後のテキストを追加
+ * @returns {string} 整形された質問テキスト
+ */
 function getQuestion()
 {
-	let question = $('.text-question').val();
-	
+	let question = $('.text-question').val();  // 質問テキストを取得
+    
+	// メッセージがなく、前文がある場合、質問の前に追加
 	if(($('.msg').length == 0) && $('.before-body').text() != '')
 	{
 		question = $('.before-body').text() + '\n' + question;
 	}
 
+	// メッセージがなく、後文がある場合、質問の後に追加
 	if(($('.msg').length == 0) && $('.after-body').text() != '')
 	{
 		question +=  '\n' + $('.after-body').text();
@@ -77,14 +91,19 @@ function getQuestion()
 	return question;
 }
 
+/**
+ * チャットを削除
+ * @param {string} chat_key - 削除するチャットのキー
+ * @returns {boolean} false - イベントのデフォルト動作を防ぐため
+ */
 function deleteChat(chat_key)
 {
-	if(confirm('削除してもよろしいですか？'))
+	if(confirm('削除してもよろしいですか？'))  // 削除確認ダイアログを表示
 	{
-		location.href = CHAT_DELETE_URL + '/' +  chat_key;
+		location.href = CHAT_DELETE_URL + '/' +  chat_key;  // 削除URLに遷移
 	}
 
-	event.stopPropagation();
-	return false;
+	event.stopPropagation();  // イベントの伝播を停止
+	return false;  // デフォルトの動作を防止
 }
 

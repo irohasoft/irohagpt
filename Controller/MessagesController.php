@@ -32,14 +32,14 @@ class MessagesController extends AppController
 	];
 
 	/**
-	 * 問題を出題
-	 * @param int $content_id 表示するコンテンツ(テスト)のID
-	 * @param int $record_id 履歴ID (テスト結果表示の場合、指定)
+	 * メッセージ一覧
+	 * @param string $chat_key チャットキー
 	 */
 	public function index($chat_key)
 	{
 		$user_id = $this->readAuthUser('id');
-		$first_message = $this->getData('first_message');
+		$first_message = $this->getData('message');
+		$first_image_urls = $this->getData('image_urls');
 		$template_id = $this->getData('template_id');
 
 		$messages = $this->fetchTable('Message')->find()
@@ -51,7 +51,9 @@ class MessagesController extends AppController
 			->where(['Chat.user_id' => $user_id, 'Chat.chat_key' => $chat_key])
 			->first();
 		
-		$this->set(compact('template_id', 'messages', 'chat', 'chat_key', 'first_message'));
+		//debug($first_message);
+
+		$this->set(compact('template_id', 'messages', 'chat', 'chat_key', 'first_message', 'first_image_urls'));
 	}
 
 	/**
