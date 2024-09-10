@@ -95,31 +95,64 @@ class HomesController extends AppController
 			$fileUpload->setExtension($upload_extensions);
 			$fileUpload->setMaxSize($upload_maxsize);
 			$fileUpload->readFile($this->getParam('form')['file']); // ファイルの読み込み
-			
-			$str = substr(str_shuffle('abcdefghijklmnopqrstuvwxyz'), 0, 4);
-			
-			// ファイル名：YYYYMMDDHHNNSS形式＋ランダムな4桁の文字列＋"既存の拡張子"
-			$new_name = date('YmdHis').$str.$fileUpload->getExtension($fileUpload->getFileName());
 
-			$file_name = WWW_ROOT.'uploads'.DS.$new_name; // ファイルのパス
-			$file_url = Router::url('/uploads/'.$new_name, true); // ファイルのURL (https://xxxx 形式)
+			$response = ['error_code' => 0, 'error_message' => ''];
 
-			$result = $fileUpload->saveFile($file_name); // ファイルの保存
+			$error_code = $fileUpload->checkFile();
 			
-			if ($result) {
-				// 画像のリサイズ処理
-				$this->resizeImage($file_name, 1024, 1024);
+			if($error_code > 0)
+			{
+				$response['error_code'] = $error_code;
+
+				switch($error_code)
+				{
+					case 1001 : // 拡張子エラー
+						$response['error_message'] = __('アップロードされたファイルの形式は許可されていません');
+						break;
+					case 1002 : // ファイルサイズが0
+					case 1003 : // ファイルサイズオバー
+						$size = $this->getData('form')['file']['size'];
+						$response['error_message'] = __("アップロードされたファイルのサイズ（{$size}）は許可されていません");
+						break;
+					default :
+					$response['error_message'] = __("アップロード中にエラーが発生しました ({$error_code})");
+				}
+
+				return json_encode($response);
+			}
+			else
+			{
+					$str = substr(str_shuffle('abcdefghijkmnopqrstuvwxyz'), 0, 4);
+			
+				// ファイル名：YYYYMMDDHHNNSS形式＋ランダムな4桁の文字列＋"既存の拡張子"
+				$new_name = date('YmdHis').$str.$fileUpload->getExtension($fileUpload->getFileName());
+	
+				$file_path = WWW_ROOT.'uploads'.DS.$new_name; // ファイルのパス
+				$file_url = Router::url('/uploads/'.$new_name, true); // ファイルのURL (https://xxxx 形式)
+	
+				$result = $fileUpload->saveFile($file_path); // ファイルの保存
 				
-				$response = ['imageUrl' => $file_url];
-			} else {
-				$response = ['error' => true];
+				if ($result)
+				{
+					// 画像のリサイズ処理
+					$this->resizeImage($file_path, 1024, 1024);
+					
+					$response['image_url'] = $file_url;
+				}
+				else
+				{
+					$response['error_code'] = 1004;
+				}
 			}
 			
 			// 画像のURLをJSON形式で出力
 			return json_encode($response);
 		}
 
-		return 'not found';
+		$response['error_code'] = 1005;
+		$response['error_message'] = '画像ファイルが指定されていません';
+		
+		return json_encode($response);
 	}
 
 	/**

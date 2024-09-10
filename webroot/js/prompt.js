@@ -43,7 +43,8 @@ $(document).ready(function()
         
         var files = event.target.files;  // 選択されたファイルを取得
 
-        uploadFiles(files);  // ファイルアップロード処理を呼び出し
+        if(files.length > 0)
+            uploadFiles(files);  // ファイルアップロード処理を呼び出し
     });
 
     // 指定されたファイルをアップロード
@@ -68,17 +69,25 @@ $(document).ready(function()
             contentType: false,
             processData: false,
             success: function(response) {
-                console.log('ファイルが正常にアップロードされました。');
-                console.log(response);
-
                 var responseObject = JSON.parse(response);
-                var newImageUrl = responseObject.imageUrl;
 
-                // 新しい画像を追加
-                addUploadedImage(newImageUrl);
+                if(responseObject.error_code == 0)
+                {
+                    console.log('ファイルが正常にアップロードされました。');
+                    console.log(response);
 
-                // hidden項目を更新
-                updateHiddenImageUrls();
+                    var newImageUrl = responseObject.image_url;
+
+                    // 新しい画像を追加
+                    addUploadedImage(newImageUrl);
+    
+                    // hidden項目を更新
+                    updateHiddenImageUrls();    
+                }
+                else
+                {
+                    alert(responseObject.error_message);
+                }
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 console.error('File upload failed:', textStatus, errorThrown);
