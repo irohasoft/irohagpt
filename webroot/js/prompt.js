@@ -1,10 +1,38 @@
 $(document).ready(function()
 {
-    // ドラッグ開始時のイベントハンドラ
-    $('.drop-container').on("dragenter", function(e)
+    // プロンプトにフォーカスをセット
+	$('.text-question').focus();
+    
+    // 改行時にプロンプトを送信
+	$(".text-question").keydown(function(e)
+	{
+		if(e.keyCode === 13 && !e.shiftKey)
+		{ // Enterキーのみの場合はフォームをPOSTする
+			e.preventDefault(); // フォームのPOSTをキャンセル
+			sendToAPI(); // フォームをPOSTする
+		}
+		else if(e.keyCode === 13 && e.shiftKey)
+		{ // Shift+Enterキーの場合は改行する
+			e.preventDefault(); // デフォルトの改行処理をキャンセル
+			var start = this.selectionStart;
+			var end = this.selectionEnd;
+			var value = $(this).val();
+			$(this).val(value.substring(0, start) + "\n" + value.substring(end));
+			this.selectionStart = this.selectionEnd = start + 1; // キャレットを改行した場所に移動する
+		}
+	});
+
+    $('#btnSend').on('click', function(event)
     {
-        e.stopPropagation();  // イベントの伝播を停止
-        e.preventDefault();   // デフォルトの動作を防止
+        event.preventDefault();   // デフォルトの動作を防止
+        sendToAPI(); // フォームをPOSTする
+    });
+
+    // ドラッグ開始時のイベントハンドラ
+    $('.drop-container').on("dragenter", function(event)
+    {
+        event.stopPropagation();  // イベントの伝播を停止
+        event.preventDefault();   // デフォルトの動作を防止
     });
     
     // ドラッグ中のイベントハンドラ

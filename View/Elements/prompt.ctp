@@ -6,3 +6,4 @@
 </div>
 <textarea class="form-control text-question" name="message" maxlength="<?= Configure::read('prompt_max') ?>" type="text" required placeholder="質問を入力し、エンターキーを押下してください。
 改行する場合は、Shift+エンターキーを押下してください。"><?= $message?></textarea>
+<button class="btn btn-default" id="btnSend">送信</button>

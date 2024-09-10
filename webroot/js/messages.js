@@ -3,25 +3,6 @@ $(document).ready(function()
 	// プロンプトにフォーカスをセット
 	$('.text-question').focus();
 	
-	// 改行時にプロンプトを送信
-	$(".text-question").keydown(function(e)
-	{
-		if(e.keyCode === 13 && !e.shiftKey)
-		{ // Enterキーのみの場合はフォームをPOSTする
-			e.preventDefault(); // フォームのPOSTをキャンセル
-			sendToAPI(); // フォームをPOSTする
-		}
-		else if(e.keyCode === 13 && e.shiftKey)
-		{ // Shift+Enterキーの場合は改行する
-			e.preventDefault(); // デフォルトの改行処理をキャンセル
-			var start = this.selectionStart;
-			var end = this.selectionEnd;
-			var value = $(this).val();
-			$(this).val(value.substring(0, start) + "\n" + value.substring(end));
-			this.selectionStart = this.selectionEnd = start + 1; // キャレットを改行した場所に移動する
-		}
-	});
-
 	// 回答に markdown を適用
 	$('.msg-assistant').each(function(index)
 	{
