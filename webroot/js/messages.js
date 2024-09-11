@@ -1,8 +1,5 @@
 $(document).ready(function()
-{
-	// プロンプトにフォーカスをセット
-	$('.text-question').focus();
-	
+{	
 	// 回答に markdown を適用
 	$('.msg-assistant').each(function(index)
 	{
