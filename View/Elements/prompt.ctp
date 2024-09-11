@@ -1,5 +1,5 @@
 <div class="uploaded-images-container"></div>
-<div class="drop-container alert alert-warning">
+<div class="drop-container alert">
     <p><span class="glyphicon glyphicon-picture" aria-hidden="true"></span> <?=__('画像ファイル（ドラックアンドドロップによる指定も可能）')?></p>
     <input type="file" name="data[Content][file]" id="ContentFile" class="form-control" accept="image/*">
     <input type="hidden" id="hidImageUrls" name="image_urls" value="<?= $image_urls?>" />

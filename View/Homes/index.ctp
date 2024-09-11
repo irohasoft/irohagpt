@@ -59,6 +59,9 @@
 				<button class="btn btn-default" onclick="location.href='<?= Router::url(['controller' => 'templates', 'action' => 'index']);?>'; return false;"><?= __('テンプレート管理'); ?></button>
 				</div>
 				<h5><?= __('よく使うテンプレート'); ?></h5>
+				<?php
+					$title_newchat = __('新規チャット');
+				?>
 				<div>
 					<?php if($template_id){?>
 						<a href="#" onclick="changeTemplate()">×<?= __('選択を解除'); ?></a>　
@@ -66,33 +69,41 @@
 					<?php foreach ($popular_templates as $row): ?>
 						<?php
 						$title = h($row['title']);
-
+						
 						if($row['id'] == $template_id)
-							$title = '<b>'.$title.'</b>';
+						{
+							$title_newchat = $title;
+							$title = '<b><u>'.$title.'</u></b>';
+						}
 						?>
 						<a href="#" onclick="changeTemplate(<?= h($row['id']);?>)"><?= $title?></a>　
 					<?php endforeach; ?>
 				</div>
-				<h5><?= __('新規チャット'); ?></h5>
-				<?php if(($template) && ($template['Template']['before_body'] != '')) {?>
-					<?php
-						$body = h($template['Template']['before_body']);
-						$body = nl2br($body);
-						$body = Utils::convertStringToElement($body);
-					?>
-					<div class="well before-body"><?= $body?></div>
-				<?php }?>
-				<!--prompt.ctp-->
-				<?= $this->element('prompt', ['message' => (($template) ? $template['Template']['body'] : ''), 'image_urls' => null]);?>
-				<?php if(($template) && ($template['Template']['after_body'] != '')) {?>
-					<div class="well after-body">
-					<?php
-						$body = $this->Text->autoLinkUrls($template['Template']['after_body'], [ 'target' => '_blank']);
-						$body = nl2br($body);
-						echo $body;
-					?>
+
+				<div class="panel panel-default">
+					<div class="panel-heading"><?= $title_newchat; ?></div>
+					<div class="panel-body">
+						<?php if(($template) && ($template['Template']['before_body'] != '')) {?>
+							<?php
+								$body = h($template['Template']['before_body']);
+								$body = nl2br($body);
+								$body = Utils::convertStringToElement($body);
+							?>
+							<div class="before-body"><?= $body?></div>
+						<?php }?>
+						<!--prompt.ctp-->
+						<?= $this->element('prompt', ['message' => (($template) ? $template['Template']['body'] : ''), 'image_urls' => null]);?>
+						<?php if(($template) && ($template['Template']['after_body'] != '')) {?>
+							<div class="after-body">
+							<?php
+								$body = $this->Text->autoLinkUrls($template['Template']['after_body'], [ 'target' => '_blank']);
+								$body = nl2br($body);
+								echo $body;
+							?>
+							</div>
+						<?php }?>
 					</div>
-				<?php }?>
+				</div>
 			</form>
 			<hr>
 			<label><?= __('チャットの履歴'); ?></label>
