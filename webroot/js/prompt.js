@@ -2,7 +2,7 @@ $(document).ready(function()
 {
     // プロンプトにフォーカスをセット
 	$('.text-question').focus();
-    
+
     // 改行時にプロンプトを送信
 	$(".text-question").keydown(function(e)
 	{
@@ -26,6 +26,24 @@ $(document).ready(function()
     {
         event.preventDefault();   // デフォルトの動作を防止
         sendToAPI(); // フォームをPOSTする
+    });
+
+    // 画像ボタンのクリックイベントを追加
+    $('#btnImage').on('click', function(e) {
+        e.preventDefault();
+        $('#ContentFile').click();
+    });
+
+    // スマートデバイスの場合、撮影ボタンを表示する
+    if(CU.isSmartDevice())
+    {
+        $('#btnCamera').show();
+    }
+
+    // 画像ボタンのクリックイベントを追加
+    $('#btnCamera').on('click', function(e) {
+        e.preventDefault();
+        $('#ContentCamera').click();
     });
 
     // ドラッグ開始時のイベントハンドラ
@@ -110,7 +128,9 @@ $(document).ready(function()
                     addUploadedImage(newImageUrl);
     
                     // hidden項目を更新
-                    updateHiddenImageUrls();    
+                    updateHiddenImageUrls();
+
+                    $('.text-question').focus();
                 }
                 else
                 {

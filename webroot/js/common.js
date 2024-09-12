@@ -71,6 +71,11 @@ CommonUtility.prototype.replaceTextElements = function (selector)
 	});
 }
 
+CommonUtility.prototype.isSmartDevice = function()
+{
+	return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+}
+
 CommonUtility.prototype.getRandomString = function (digit)
 {
 	var chars = '23456789abcdefghijkmnopqrstuvwxyz';
