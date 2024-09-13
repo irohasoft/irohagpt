@@ -1,8 +1,8 @@
 $(document).ready(function()
 {
-	$('.text-question').focus();
+	$('.text-message').focus();
 
-	$('.text-question').keydown(textOnKeydown);
+	$('.text-message').keydown(textOnKeydown);
 	$('.control-text').keydown(textOnKeydown);
 
 	$('.list-group').pagination({
@@ -43,7 +43,7 @@ function sendToAPI()
 	CommonUtil.replaceSelectElements('.control-select');
 	CommonUtil.replaceTextElements('.control-text');
 
-	$('.text-question').val(getQuestion());
+	$('.text-message').val(getQuestion());
 	$('.template-form')[0].action = MESSAGE_URL + CommonUtil.getRandomString(8);
 	$('.template-form').submit(); // フォームをPOSTする
 }
@@ -74,7 +74,7 @@ function startChat()
  */
 function getQuestion()
 {
-	let question = $('.text-question').val();  // メッセージテキストを取得
+	let question = $('.text-message').val();  // メッセージテキストを取得
     
 	// メッセージがなく、前文がある場合、メッセージの前に追加
 	if(($('.msg').length == 0) && $('.before-body').text() != '')

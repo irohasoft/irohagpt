@@ -14,8 +14,8 @@ $(document).ready(function()
 
 	// メッセージの初期値が存在する場合、APIに送信
 	if(
-		($('.text-question').length > 0) &&
-		($('.text-question').val() != '')
+		($('.text-message').length > 0) &&
+		($('.text-message').val() != '')
 	)
 	{
 		sendToAPI();
@@ -25,7 +25,7 @@ $(document).ready(function()
 // APIに送信
 function sendToAPI()
 {
-	if($('.text-question').val() == '')
+	if($('.text-message').val() == '')
 	{
 		alert('メッセージが入力されていません');
 		return;
@@ -78,7 +78,7 @@ function sendToAPI()
 
 
 	$('.btn-primary').prop('disabled', true);
-	$('.text-question').prop('disabled', true);
+	$('.text-message').prop('disabled', true);
 
 	$.ajax({
 		data: data,
@@ -143,13 +143,13 @@ function sendToAPI()
 
 			// メッセージおよび画像の選択をクリアする
 			$('.btn-primary').prop('disabled', false);
-			$('.text-question').prop('disabled', false);
-			$('.text-question').val('');
+			$('.text-message').prop('disabled', false);
+			$('.text-message').val('');
 			$('.uploaded-images-container').empty();
 			$('#hidImageUrls').val('[]');
 			hideLoadingScreen();
 			
-			setTimeout("$('.text-question').focus();", 500);
+			setTimeout("$('.text-message').focus();", 500);
 
 			// チャットのタイトルを更新
 			updateTitle();
@@ -157,8 +157,8 @@ function sendToAPI()
 		error: function(url) {
 			alert('通信中にエラーが発生しました');
 			$('.btn-primary').prop('disabled', false);
-			$('.text-question').prop('disabled', false);
-			setTimeout("$('.text-question').focus();", 500);
+			$('.text-message').prop('disabled', false);
+			setTimeout("$('.text-message').focus();", 500);
 			hideLoadingScreen();
 		}
 	});
@@ -169,7 +169,7 @@ function sendToAPI()
 // APIに「続けてください」を送信
 function continueToChat()
 {
-	$('.text-question').val('続けてください');
+	$('.text-message').val('続けてください');
 	sendToAPI();
 }
 
@@ -206,7 +206,7 @@ function updateTitle()
 function getQuestion()
 {
 	// メッセージ
-	let content = $('.text-question').val();
+	let content = $('.text-message').val();
 
 	if(($('.msg').length == 0) && $('.before-body').text() != '')
 	{

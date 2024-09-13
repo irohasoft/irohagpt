@@ -1,10 +1,10 @@
 $(document).ready(function()
 {
     // メッセージにフォーカスをセット
-	$('.text-question').focus();
+	$('.text-message').focus();
 
     // 改行時にメッセージを送信
-	$(".text-question").keydown(function(e)
+	$(".text-message").keydown(function(e)
 	{
 		if(e.keyCode === 13 && !e.shiftKey)
 		{ // Enterキーのみの場合はフォームをPOSTする
@@ -130,7 +130,7 @@ $(document).ready(function()
                     // hidden項目を更新
                     updateHiddenImageUrls();
 
-                    $('.text-question').focus();
+                    $('.text-message').focus();
                 }
                 else
                 {
