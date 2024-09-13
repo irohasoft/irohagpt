@@ -1,9 +1,9 @@
 $(document).ready(function()
 {
-    // プロンプトにフォーカスをセット
+    // メッセージにフォーカスをセット
 	$('.text-question').focus();
 
-    // 改行時にプロンプトを送信
+    // 改行時にメッセージを送信
 	$(".text-question").keydown(function(e)
 	{
 		if(e.keyCode === 13 && !e.shiftKey)

@@ -12,7 +12,7 @@ $(document).ready(function()
 		$(this).html(html);
 	});
 
-	// プロンプトの初期値が存在する場合、APIに送信
+	// メッセージの初期値が存在する場合、APIに送信
 	if(
 		($('.text-question').length > 0) &&
 		($('.text-question').val() != '')
@@ -27,14 +27,14 @@ function sendToAPI()
 {
 	if($('.text-question').val() == '')
 	{
-		alert('質問が入力されていません');
+		alert('メッセージが入力されていません');
 		return;
 	}
 
 	// ローディング画面を表示
 	showLoadingScreen();
 	
-	const content = getQuestion(); // 新しい質問
+	const content = getQuestion(); // 新しいメッセージ
 	const messages = getMessages(); // 対話の履歴
 	
 	messages.push({role: 'user', content: content});
@@ -141,7 +141,7 @@ function sendToAPI()
 				}
 			}
 
-			// 質問および画像の選択をクリアする
+			// メッセージおよび画像の選択をクリアする
 			$('.btn-primary').prop('disabled', false);
 			$('.text-question').prop('disabled', false);
 			$('.text-question').val('');
@@ -202,10 +202,10 @@ function updateTitle()
 	return false;
 }
 
-// プロンプトを取得
+// メッセージを取得
 function getQuestion()
 {
-	// 質問
+	// メッセージ
 	let content = $('.text-question').val();
 
 	if(($('.msg').length == 0) && $('.before-body').text() != '')

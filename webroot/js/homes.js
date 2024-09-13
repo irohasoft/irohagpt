@@ -35,7 +35,7 @@ function sendToAPI()
 {
 	if(getQuestion() == '')
 	{
-		alert('質問が入力されていません');
+		alert('メッセージが入力されていません');
 		return;
 	}
 
@@ -69,20 +69,20 @@ function startChat()
 }
 
 /**
- * 質問テキストを取得し、必要に応じて前後のテキストを追加
- * @returns {string} 整形された質問テキスト
+ * メッセージテキストを取得し、必要に応じて前後のテキストを追加
+ * @returns {string} 整形されたメッセージテキスト
  */
 function getQuestion()
 {
-	let question = $('.text-question').val();  // 質問テキストを取得
+	let question = $('.text-question').val();  // メッセージテキストを取得
     
-	// メッセージがなく、前文がある場合、質問の前に追加
+	// メッセージがなく、前文がある場合、メッセージの前に追加
 	if(($('.msg').length == 0) && $('.before-body').text() != '')
 	{
 		question = $('.before-body').text() + '\n' + question;
 	}
 
-	// メッセージがなく、後文がある場合、質問の後に追加
+	// メッセージがなく、後文がある場合、メッセージの後に追加
 	if(($('.msg').length == 0) && $('.after-body').text() != '')
 	{
 		question +=  '\n' + $('.after-body').text();

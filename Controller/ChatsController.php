@@ -103,8 +103,7 @@ class ChatsController extends AppController
 				{
 					$message .= $c['message']['content'];
 				}
-
-
+				
 				if(is_array($last_message['content']))
 				{
 					$text = $last_message['content'][0]['text'];
@@ -119,7 +118,7 @@ class ChatsController extends AppController
 					$text =  $last_message['content'];
 				}
 				
-				// ユーザの質問
+				// ユーザのメッセージ
 				$data = [
 					'chat_key' => $chat_key,
 					'user_id' => $user_id,
