@@ -28,6 +28,7 @@ function sendToAPI()
 	if($('.text-message').val() == '')
 	{
 		alert('メッセージが入力されていません');
+		$('.text-message').focus();
 		return;
 	}
 

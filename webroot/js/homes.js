@@ -36,6 +36,7 @@ function sendToAPI()
 	if(getQuestion() == '')
 	{
 		alert('メッセージが入力されていません');
+		$('.text-message').focus();
 		return;
 	}
 
