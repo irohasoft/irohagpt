@@ -44,40 +44,42 @@
 		<div class="panel-heading"><?= __('チャット'); ?></div>
 		<div class="panel-body">
 			<form method="post" class="template-form">
-				<label><?= __('テンプレート'); ?></label>
-				<div class="horizontal">
-				<select class="form-control" id="TemplateId" name="template_id" onchange="changeTemplate($('#TemplateId').val());">
-					<option value=""><?= __('テンプレートを使用しない'); ?></option>
-					<?php foreach ($templates as $row): ?>
-						<option value="<?= h($row['Template']['id']);?>" <?= ($row['Template']['id'] == $template_id) ? 'selected' : ''?>><?= h($row['Template']['title']);?></option>
-					<?php endforeach; ?>
-				</select>
-				<input type="hidden" id="hidTemplateId" name="template_id" value="<?= h($template_id)?>" />
-				<!--
-				<button class="btn btn-primary" onclick="location.href='<?= Router::url(['controller' => 'messages', 'action' => 'index', Utils::getNewPassword(8)]);?>/' + $('#TemplateId').val()">+ 新規チャット</button>
-				-->
-				<button class="btn btn-default" onclick="location.href='<?= Router::url(['controller' => 'templates', 'action' => 'index']);?>'; return false;"><?= __('テンプレート管理'); ?></button>
-				</div>
-				<h5><?= __('よく使うテンプレート'); ?></h5>
-				<?php
-					$title_newchat = __('新規チャット');
-				?>
-				<div>
-					<?php if($template_id){?>
-						<a href="#" onclick="changeTemplate()">×<?= __('選択を解除'); ?></a>　
-					<?php }?>
-					<?php foreach ($popular_templates as $row): ?>
-						<?php
-						$title = h($row['title']);
-						
-						if($row['id'] == $template_id)
-						{
-							$title_newchat = $title;
-							$title = '<b><u>'.$title.'</u></b>';
-						}
-						?>
-						<a href="#" onclick="changeTemplate(<?= h($row['id']);?>)"><?= $title?></a>　
-					<?php endforeach; ?>
+				<div class="panel well">
+					<label><?= __('テンプレート'); ?></label>
+					<div class="horizontal">
+					<select class="form-control" id="TemplateId" name="template_id" onchange="changeTemplate($('#TemplateId').val());">
+						<option value=""><?= __('テンプレートを使用しない'); ?></option>
+						<?php foreach ($templates as $row): ?>
+							<option value="<?= h($row['Template']['id']);?>" <?= ($row['Template']['id'] == $template_id) ? 'selected' : ''?>><?= h($row['Template']['title']);?></option>
+						<?php endforeach; ?>
+					</select>
+					<input type="hidden" id="hidTemplateId" name="template_id" value="<?= h($template_id)?>" />
+					<!--
+					<button class="btn btn-primary" onclick="location.href='<?= Router::url(['controller' => 'messages', 'action' => 'index', Utils::getNewPassword(8)]);?>/' + $('#TemplateId').val()">+ 新規チャット</button>
+					-->
+					<button class="btn btn-default" onclick="location.href='<?= Router::url(['controller' => 'templates', 'action' => 'index']);?>'; return false;"><?= __('テンプレート管理'); ?></button>
+					</div>
+					<h5><?= __('よく使うテンプレート'); ?></h5>
+					<?php
+						$title_newchat = __('新規チャット');
+					?>
+					<div>
+						<?php if($template_id){?>
+							<a href="#" onclick="changeTemplate()">×<?= __('選択を解除'); ?></a>　
+						<?php }?>
+						<?php foreach ($popular_templates as $row): ?>
+							<?php
+							$title = h($row['title']);
+							
+							if($row['id'] == $template_id)
+							{
+								$title_newchat = $title;
+								$title = '<b><u>'.$title.'</u></b>';
+							}
+							?>
+							<a href="#" onclick="changeTemplate(<?= h($row['id']);?>)"><?= $title?></a>　
+						<?php endforeach; ?>
+					</div>
 				</div>
 
 				<div class="panel panel-default">
