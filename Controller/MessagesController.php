@@ -147,13 +147,13 @@ class MessagesController extends AppController
 	/**
 	 * 問題を編集
 	 * @param int $content_id 追加対象のコンテンツ(テスト)のID
-	 * @param int $question_id 編集対象の問題のID
+	 * @param int $message_id 編集対象の問題のID
 	 */
-	public function admin_edit($content_id, $question_id = null)
+	public function admin_edit($content_id, $message_id = null)
 	{
 		$content_id = intval($content_id);
 		
-		if($this->isEditPage() && !$this->Message->exists($question_id))
+		if($this->isEditPage() && !$this->Message->exists($message_id))
 		{
 			throw new NotFoundException(__('Invalid contents question'));
 		}
@@ -163,7 +163,7 @@ class MessagesController extends AppController
 		
 		if($this->request->is(['post', 'put']))
 		{
-			if($question_id == null)
+			if($message_id == null)
 			{
 				$this->request->data['Message']['user_id'] = $this->readAuthUser('id');
 				$this->request->data['Message']['content_id'] = $content_id;
@@ -189,7 +189,7 @@ class MessagesController extends AppController
 		}
 		else
 		{
-			$this->request->data = $this->Message->get($question_id);
+			$this->request->data = $this->Message->get($message_id);
 		}
 		
 		$this->set(compact('content'));
@@ -197,11 +197,11 @@ class MessagesController extends AppController
 
 	/**
 	 * 問題を削除
-	 * @param int $question_id 削除対象の問題のID
+	 * @param int $message_id 削除対象の問題のID
 	 */
-	public function admin_delete($question_id = null)
+	public function admin_delete($message_id = null)
 	{
-		$this->Message->id = $question_id;
+		$this->Message->id = $message_id;
 		
 		if(!$this->Message->exists())
 		{
@@ -211,7 +211,7 @@ class MessagesController extends AppController
 		$this->request->allowMethod('post', 'delete');
 		
 		// 問題情報を取得
-		$question = $this->Message->get($question_id);
+		$message = $this->Message->get($message_id);
 		
 		if($this->Message->delete())
 		{
@@ -219,7 +219,7 @@ class MessagesController extends AppController
 			return $this->redirect([
 				'controller' => 'contents_questions',
 				'action' => 'index',
-				$question['Message']['content_id']
+				$message['Message']['content_id']
 			]);
 		}
 		else

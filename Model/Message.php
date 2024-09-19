@@ -27,7 +27,7 @@ class Message extends AppModel
 	 */
 	public $validate = [
 		'record_id'   => ['numeric' => ['rule' => ['numeric']]],
-		'question_id' => ['numeric' => ['rule' => ['numeric']]],
+		'message_id' => ['numeric' => ['rule' => ['numeric']]],
 		'score'       => ['numeric' => ['rule' => ['numeric']]]
 	];
 	
