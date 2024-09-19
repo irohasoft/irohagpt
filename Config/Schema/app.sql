@@ -174,33 +174,6 @@ CREATE TABLE IF NOT EXISTS `ib_logs` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-
--- ----------------------------
--- Table structure for `ib_contents`
--- ----------------------------
-CREATE TABLE IF NOT EXISTS `ib_contents` (
-  `id` int(8) NOT NULL AUTO_INCREMENT,
-  `template_id` int(8) NOT NULL DEFAULT '0',
-  `user_id` int(8) NOT NULL,
-  `title` varchar(200) NOT NULL DEFAULT '',
-  `url` varchar(200) DEFAULT NULL,
-  `file_name` varchar(200) DEFAULT NULL,
-  `kind` varchar(20) NOT NULL DEFAULT '',
-  `body` text,
-  `timelimit` int(8) DEFAULT NULL,
-  `pass_rate` int(8) DEFAULT NULL,
-  `question_count` int(8) DEFAULT NULL,
-  `wrong_mode` int(1) NOT NULL DEFAULT '1',
-  `status` int(1) NOT NULL DEFAULT '1',
-  `opened` datetime DEFAULT NULL,
-  `created` datetime NOT NULL,
-  `modified` datetime DEFAULT NULL,
-  `deleted` datetime DEFAULT NULL,
-  `sort_no` int(8) NOT NULL DEFAULT '0',
-  `comment` text,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 -- ----------------------------
 -- Table structure for `ib_cake_sessions`
 -- ----------------------------

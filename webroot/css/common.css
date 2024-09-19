@@ -792,71 +792,6 @@ form .required .control-label:after
 	margin-left			: 10px;
 }
 
-.contents-questions-index .radio-group
-{
-	font-size			: 18px;
-	padding				: 10px;
-	line-height			: 180%;
-}
-
-.contents-questions-index input[type=radio]
-{
-	padding				: 10px;
-}
-
-.contents-questions-index input[type=checkbox]
-{
-	float				: none;
-}
-
-.contents-questions-index .result-currect
-{
-	font-size			: 18px;
-	padding				: 10px;
-	line-height			: 180%;
-	color				: #0070c0;
-	font-weight			: bold;
-}
-
-.contents-questions-index .result-wrong
-{
-	font-size			: 18px;
-	padding				: 10px;
-	line-height			: 180%;
-	color				: #c00000;
-	font-weight			: bold;
-}
-
-
-.form-inline
-{
-}
-
-.contents-questions-index #lblStudySec
-{
-	position			: fixed;
-	top					: 50px;
-	right				: 20px;
-	display				: none;
-}
-
-.contents-questions-index .question-text,
-.contents-questions-index .correct-text
-{
-	padding				: 10px;
-	border-radius		: 6px;
-}
-
-.contents-questions-index img{
-	max-width			: 100%;
-}
-
-.contents-questions-index .result-table
-{
-	margin				: 10px;
-	width				: 250px;
-}
-
 .install-index .panel-info,
 .install-installed .panel-info,
 .install-complete .panel-info,
@@ -893,6 +828,19 @@ form .required .control-label:after
 	max-width: 200px;
 	max-height: 200px;
 	margin-right: 10px;
+}
+
+.uploaded-images-container
+{
+	display: flex;
+    align-items: center;
+    width: 100%;
+    flex-wrap: wrap;
+}
+
+.uploaded-image-container
+{
+	padding: 10px;
 }
 
 #btnCamera
@@ -977,12 +925,6 @@ form .required .control-label:after
 	{
 		text-align			: left;
 		width				: 100%;
-	}
-
-	.contents-questions-index iframe,
-	.contents-questions-index img
-	{
-		max-width			: 100%;
 	}
 
 	.ib-logo

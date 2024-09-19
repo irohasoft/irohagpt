@@ -21,7 +21,6 @@ $(function (event)
 	$('.btn-score').prop('disabled', false);
 	$('.btn-danger').attr("onclick", 'alert("デモモードの為、削除できません");');
 	$('.admin-users-edit .btn-default').attr("onclick", 'alert("デモモードの為、削除できません");');
-	$('.admin-contents-index .btn-info').attr("onclick", 'alert("デモモードの為、複製できません");');
 	
 	$('.admin-users-index .btn-import').prop('disabled', false); // ユーザインポートボタン
 	

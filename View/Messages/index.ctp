@@ -7,6 +7,8 @@
 	var TEMPLATE_ID = '<?= $template_id;?>';
 	var MESSAGE_URL = '<?= Router::url(['controller' => 'messages', 'action' => 'index', 'admin' => false, Utils::getNewPassword(8)]); ?>';
 	var IMAGE_UPLOAD_URL = '<?= Router::url(['controller' => 'homes', 'action' => 'upload_image'])?>';
+
+	//IMAGE_UPLOAD_URL = "https://irohasoft.com/ig2/homes/upload_image";
 </script>
 <?php $this->end(); ?>
 <?= $this->Html->script('prompt.js?20240901');?>
