@@ -91,4 +91,5 @@ $config['upload_image_extensions'] = [
 	'.jpeg',
 ];
 
-$config['upload_image_maxsize'] = 1024 * 1024 *  2;
+// アップロード可能な画像の最大サイズ (バイト)
+$config['upload_image_maxsize'] = 1024 * 1024 * 10;
