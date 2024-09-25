@@ -257,24 +257,23 @@ class TemplatesController extends AppController
 			
 			foreach($list as $template_id)
 			{
-				$data = $this->Template->get($template_id);
+				$data = $this->Template->get($template_id)['Template'];
 				
-				if($data['Template']['is_master'] != 1)
+				if($data['is_master'] != 1)
 					continue;
 				
-				$data['Template']['id'] = null;
-				$data['Template']['user_id'] = $this->readAuthUser('id');
-				$data['Template']['sort_no'] = 0;
-				$data['Template']['is_master'] = null;
-				$data['Template']['created'] = null;
-				$data['Template']['modified'] = null;
+				$data['id'] = null;
+				$data['user_id'] = $this->readAuthUser('id');
+				$data['sort_no'] = 0;
+				$data['is_master'] = 0;
+				$data['created'] = null;
+				$data['modified'] = null;
 				
 				$this->Template->save($data);
-				
-				$this->Flash->success(__('テンプレートをコピーしました'));
-				
-				return $this->redirect(['action' => 'index']);
 			}
+			
+			$this->Flash->success(__('テンプレートをコピーしました'));
+			return $this->redirect(['action' => 'index']);
 		}
 		
 		$this->set('templates', $templates);
