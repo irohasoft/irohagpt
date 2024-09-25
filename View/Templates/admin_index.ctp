@@ -19,6 +19,7 @@
 		echo $this->Form->create('Template');
 		
 		echo '<div class="ib-row">';
+		echo $this->Form->searchField('title',		['label' => __('テンプレート名')]);
 		echo $this->Form->searchField('username',	['label' => __('ログインID')]);
 		echo $this->Form->searchField('name',		['label' => __('氏名')]);
 		echo '</div>';

@@ -76,6 +76,10 @@ class Template extends AppModel
 	 * https://github.com/CakeDC/search/blob/master/Docs/Home.md
 	 */
 	public $filterArgs = [
+		'title' => [
+			'type' => 'like',
+			'field' => 'Template.title'
+		],
 		'username' => [
 			'type' => 'like',
 			'field' => 'User.username'
