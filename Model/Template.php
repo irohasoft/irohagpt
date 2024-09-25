@@ -123,6 +123,8 @@ FROM
 	LEFT JOIN ib_chats c ON t.id = c.template_id 
 WHERE 
 	t.user_id = :user_id
+	AND
+	t.is_master = 0
 GROUP BY
 	t.id 
 ORDER BY
