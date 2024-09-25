@@ -52,7 +52,7 @@ CREATE TABLE IF NOT EXISTS `ib_chats` (
 -- ----------------------------
 CREATE TABLE IF NOT EXISTS `ib_messages` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `chat_id` int(11) NOT NULL,
+  `chat_id` int(11) DEFAULT NULL,
   `template_id` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
   `chat_key` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
   `user_id` int(11) DEFAULT NULL,
@@ -185,6 +185,6 @@ CREATE TABLE IF NOT EXISTS `ib_cake_sessions` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 INSERT INTO `ib_settings` VALUES ('1', 'title', 'システム名', 'iroha Chat');
-INSERT INTO `ib_settings` VALUES ('2', 'copyright', 'コピーライト', 'Copyright (C) 2022-2023 iroha Soft Co.,Ltd. All rights reserved.');
+INSERT INTO `ib_settings` VALUES ('2', 'copyright', 'コピーライト', 'Copyright (C) 2022-2024 iroha Soft Co.,Ltd. All rights reserved.');
 INSERT INTO `ib_settings` VALUES ('3', 'color', 'テーマカラー', '#31708f');
 INSERT INTO `ib_settings` VALUES ('4', 'information', 'お知らせ', '');
