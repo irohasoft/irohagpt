@@ -36,7 +36,7 @@ class TemplatesController extends AppController
 
 		// 個人のテンプレート
 		$templates = $this->fetchTable('Template')->find()
-			->where(['Template.user_id' => $user_id])
+			->where(['Template.user_id' => $user_id, 'Template.is_master' => 0])
 			->order('Template.sort_no asc')
 			->all();
 		
@@ -61,7 +61,7 @@ class TemplatesController extends AppController
 		// Model の filterArgs に定義した内容にしたがって検索条件を作成
 		$conditions = $this->Template->parseCriteria($this->Prg->parsedParams());
 		
-		$conditions['Template.is_master'] = null;
+		$conditions['Template.is_master'] = 0;
 		$this->Paginator->settings['conditions'] = $conditions;
 		
 		$this->set('templates', $this->Paginator->paginate());

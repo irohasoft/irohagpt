@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS `ib_templates` (
   `sort_no` int(11) NOT NULL DEFAULT 0,
   `user_id` int(11) NOT NULL,
   `comment` text DEFAULT NULL,
-  `is_master` int(11) DEFAULT NULL,
+  `is_master` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

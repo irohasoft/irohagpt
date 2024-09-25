@@ -44,7 +44,7 @@ class HomesController extends AppController
 		$no_record = '';
 		
 		$templates = $this->fetchTable('Template')->find()
-			->where(['Template.user_id' => $user_id])
+			->where(['Template.user_id' => $user_id, 'Template.is_master' => 0])
 			->order('Template.sort_no asc')
 			->all();
 		/*
