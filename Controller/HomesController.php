@@ -111,7 +111,7 @@ class HomesController extends AppController
 						break;
 					case 1002 : // ファイルサイズが0
 					case 1003 : // ファイルサイズオバー
-						$size = $this->getData('form')['file']['size'];
+						$size = $this->getParam('form')['file']['size'];
 						$response['error_message'] = __("アップロードされたファイルのサイズ（{$size}）は許可されていません");
 						break;
 					default :
