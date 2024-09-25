@@ -31,163 +31,156 @@ class ChatsController extends AppController
 	 * @return string 実行結果
 	 */
 	public function api()
-	{
-		$this->autoRender = FALSE;
-		
-		if($this->request->is('ajax'))
-		{
-			$user_id = $this->readAuthUser('id');
-			
-			$chat_key = $_POST['chat_key'];
-			$template_id = $_POST['template_id'];
-			
-			$messages = json_decode($_POST['messages'], true);
-			$last_message = end($messages);
+    {
+        $this->autoRender = FALSE; // 自動レンダリングを無効化
+        
+        // AJAXリクエストかどうかを確認
+        if($this->request->is('ajax')) {
+            $user_id = $this->readAuthUser('id'); // 認証されたユーザーIDを取得
+            
+            // POSTデータから必要な情報を取得
+            $chat_key = $_POST['chat_key'];
+            $template_id = $_POST['template_id'];
+            $messages = json_decode($_POST['messages'], true);
+            $last_message = end($messages); // 最後のメッセージを取得
 
-			/*
-			debug($messages);
-			exit;
-			*/
+            // APIリクエスト用のヘッダーを設定
+            $header = [
+                'Authorization: Bearer ' . Configure::read('api_key'),
+                'Content-type: application/json',
+            ];
+            
+            // APIリクエストのパラメータを設定
+            $params = json_encode([
+                'model' => Configure::read('model'),
+                'messages' => $messages,
+                'temperature' => floatval(Configure::read('temperature')),
+                'max_tokens' => floatval(Configure::read('max_tokens')),
+                'top_p' => floatval(Configure::read('top_p')),
+                'frequency_penalty' => floatval(Configure::read('frequency_penalty')),
+                'presence_penalty' => floatval(Configure::read('presence_penalty'))
+            ]);
 
-			$header = [
-				'Authorization: Bearer '.Configure::read('api_key'),
-				'Content-type: application/json',
-			];
-			
-			$params = json_encode([
-				'model'			=> Configure::read('model'),
-				'messages'		=> $messages,
-				'temperature'	=> floatval(Configure::read('temperature')),
-				'max_tokens'	=> floatval(Configure::read('max_tokens')),
-				'top_p'			=> floatval(Configure::read('top_p')),
-				'frequency_penalty'	=> floatval(Configure::read('frequency_penalty')),
-				'presence_penalty'	=> floatval(Configure::read('presence_penalty'))
-			]);
+            // cURLセッションを初期化
+            $curl = curl_init('https://api.openai.com/v1/chat/completions');
 
-			/*
-			debug($params);
-			exit;
-			*/
+            // cURLオプションを設定
+            $options = [
+                CURLOPT_POST => true,
+                CURLOPT_HTTPHEADER => $header,
+                CURLOPT_POSTFIELDS => $params,
+                CURLOPT_RETURNTRANSFER => true,
+            ];
 
-			$curl = curl_init('https://api.openai.com/v1/chat/completions');
+            // 計測開始
+            $start_time = microtime(true);
 
-			$options = [
-				CURLOPT_POST => true,
-				CURLOPT_HTTPHEADER =>$header,
-				CURLOPT_POSTFIELDS => $params,
-				CURLOPT_RETURNTRANSFER => true,
-			];
+            // タイムアウト時間を設定（秒単位）
+            ini_set('max_execution_time', 180);
+            
+            // cURLオプションを適用
+            curl_setopt_array($curl, $options);
 
-			// 計測開始
-			$start_time = microtime(true);
+            // APIリクエストを実行
+            $response = curl_exec($curl);
+            $httpcode = curl_getinfo($curl, CURLINFO_RESPONSE_CODE); // HTTPレスポンスコードを取得
+            $message = '';
+            $text = '';
+            $image_urls = [];
+            $elapsed_time = 0;
+            $error = null;
 
-			// タイムアウト時間を設定（秒単位）
-			ini_set('max_execution_time', 180);
-			
-			curl_setopt_array($curl, $options);
-
-			$response = curl_exec($curl);
-			$httpcode = curl_getinfo($curl, CURLINFO_RESPONSE_CODE);
-			$message  = '';
-			$text = '';
-			$image_urls = [];
-			$elapsed_time = 0;
-			$error = null;
-
-			if(200 == $httpcode)
+            // レスポンスが成功した場合
+            if(200 == $httpcode)
 			{
-				$json_array = json_decode($response, true);
-				$choices = $json_array['choices'];
-				
-				foreach($choices as $c)
+                $json_array = json_decode($response, true);
+                $choices = $json_array['choices'];
+                
+                // APIからのメッセージを取得
+                foreach ($choices as $c) {
+                    $message .= $c['message']['content'];
+                }
+                
+                // 最後のメッセージの内容を処理
+                if(is_array($last_message['content']))
 				{
-					$message .= $c['message']['content'];
-				}
-				
-				if(is_array($last_message['content']))
-				{
-					$text = $last_message['content'][0]['text'];
-					foreach($last_message['content'] as $content)
-					{
-						if($content['type'] == 'image_url')
-							$image_urls[] = $content['image_url']['url'];
-					}
-				}
+                    $text = $last_message['content'][0]['text'];
+                    foreach ($last_message['content'] as $content) {
+                        if($content['type'] == 'image_url') {
+                            $image_urls[] = $content['image_url']['url'];
+                        }
+                    }
+                }
 				else
 				{
-					$text =  $last_message['content'];
-				}
-				
-				// ユーザのメッセージ
-				$data = [
-					'chat_key' => $chat_key,
-					'user_id' => $user_id,
-					'message' => $text,
-					'image_urls' => (count($image_urls) > 0) ? json_encode($image_urls) : null,
-					'role' => 'user',
-				];
+                    $text = $last_message['content'];
+                }
+                
+                // ユーザのメッセージをデータベースに保存
+                $data = [
+                    'chat_key' => $chat_key,
+                    'user_id' => $user_id,
+                    'message' => $text,
+                    'image_urls' => (count($image_urls) > 0) ? json_encode($image_urls) : null,
+                    'role' => 'user',
+                ];
 
-				$this->loadModel('Message');
-				$this->Message->create();
-				$this->Message->save($data);
+                $this->loadModel('Message');
+                $this->Message->create();
+                $this->Message->save($data);
 
-				// 計測終了
-				$end_time = microtime(true);
-				$elapsed_time = round($end_time - $start_time, 2);
-				
-				// AIの回答
-				$data = [
-					'chat_key' => $chat_key,
-					'user_id' => $user_id,
-					'message' => $message,
-					'role' => 'assistant',
-					'elapsed_time' => $elapsed_time,
-				];
-				
-				$this->Message->create();
-				$this->Message->save($data);
+                // 計測終了
+                $end_time = microtime(true);
+                $elapsed_time = round($end_time - $start_time, 2);
+                
+                // AIの回答をデータベースに保存
+                $data = [
+                    'chat_key' => $chat_key,
+                    'user_id' => $user_id,
+                    'message' => $message,
+                    'role' => 'assistant',
+                    'elapsed_time' => $elapsed_time,
+                ];
+                
+                $this->Message->create();
+                $this->Message->save($data);
 
-				// チャットの履歴
-				$data = $this->fetchTable('Chat')->find()
-					->where(['Chat.chat_key' => $chat_key, 'Chat.user_id' => $user_id])
-					->first();
-				
-				if(!$data)
-				{
-					$data = [];
-					$data['user_id']  = $user_id;
-					$data['chat_key'] = $chat_key;
-					$this->Chat->create();
-				}
-				
-				$data['template_id'] = $template_id ? $template_id : 0;
-				$data['title'] = '無題';
-				
-				//debug($data);
-				$this->Chat->save($data);
-			}
+                // チャットの履歴を取得または作成
+                $data = $this->fetchTable('Chat')->find()
+                    ->where(['Chat.chat_key' => $chat_key, 'Chat.user_id' => $user_id])
+                    ->first();
+                
+                if(!$data) {
+                    $data = [];
+                    $data['user_id'] = $user_id;
+                    $data['chat_key'] = $chat_key;
+                    $this->Chat->create();
+                }
+                
+                $data['template_id'] = $template_id ? $template_id : 0;
+                $data['title'] = '無題';
+                
+                // チャット履歴を保存
+                $this->Chat->save($data);
+            }
 			else
 			{
-				/*
-				debug($httpcode);
-				debug($params);
-				debug($response);
-				*/
-				
-				$json_array = json_decode($response, true);
-				$error = $json_array['error'];
-			}
+                // エラー処理
+                $json_array = json_decode($response, true);
+                $error = $json_array['error'];
+            }
 
-			return json_encode([
-				'elapsed_time' => $elapsed_time, 
-				'message' => $message, 
-				'httpcode' => $httpcode,
-				'error' => $error,
-			]);
-		}
+            // 結果をJSON形式で返す
+            return json_encode([
+                'elapsed_time' => $elapsed_time, 
+                'message' => $message, 
+                'httpcode' => $httpcode,
+                'error' => $error,
+            ]);
+        }
 
-		return false;
-	}
+        return false; // AJAXリクエストでない場合はfalseを返す
+    }
 
 	/**
 	 * チャットのタイトルを更新
