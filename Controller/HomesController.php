@@ -83,75 +83,74 @@ class HomesController extends AppController
 	{
 		$this->autoRender = FALSE;
 		
-		if($this->request->is('ajax'))
-		{
-			App::import ('Vendor', 'FileUpload');
-			$fileUpload = new FileUpload();
-			
-			// アップロード可能な拡張子とファイルサイズを指定
-			$upload_extensions = (array)Configure::read('upload_image_extensions');
-			$upload_maxsize = Configure::read('upload_image_maxsize');
-			
-			$fileUpload->setExtension($upload_extensions);
-			$fileUpload->setMaxSize($upload_maxsize);
-			$fileUpload->readFile($this->getParam('form')['file']); // ファイルの読み込み
-
-			$response = ['error_code' => 0, 'error_message' => ''];
-
-			$error_code = $fileUpload->checkFile();
-			
-			if($error_code > 0)
-			{
-				$response['error_code'] = $error_code;
-
-				switch($error_code)
-				{
-					case 1001 : // 拡張子エラー
-						$response['error_message'] = __('アップロードされたファイルの形式は許可されていません');
-						break;
-					case 1002 : // ファイルサイズが0
-					case 1003 : // ファイルサイズオバー
-						$size = $this->getParam('form')['file']['size'];
-						$response['error_message'] = __("アップロードされたファイルのサイズ（{$size}）は許可されていません");
-						break;
-					default :
-					$response['error_message'] = __("アップロード中にエラーが発生しました ({$error_code})");
-				}
-
-				return json_encode($response);
-			}
-			else
-			{
-					$str = substr(str_shuffle('abcdefghijkmnopqrstuvwxyz'), 0, 4);
-			
-				// ファイル名：YYYYMMDDHHNNSS形式＋ランダムな4桁の文字列＋"既存の拡張子"
-				$new_name = date('YmdHis').$str.$fileUpload->getExtension($fileUpload->getFileName());
-	
-				$file_path = WWW_ROOT.'uploads'.DS.$new_name; // ファイルのパス
-				$file_url = Router::url('/uploads/'.$new_name, true); // ファイルのURL (https://xxxx 形式)
-	
-				$result = $fileUpload->saveFile($file_path); // ファイルの保存
-				
-				if ($result)
-				{
-					// 画像のリサイズ処理
-					$this->resizeImage($file_path, 1024, 1024);
-					
-					$response['image_url'] = $file_url;
-				}
-				else
-				{
-					$response['error_code'] = 1004;
-				}
-			}
-			
-			// 画像のURLをJSON形式で出力
+		if(!$this->request->is('ajax'))
+		{			
+			$response['error_code'] = 1005;
+			$response['error_message'] = '画像ファイルが指定されていません';
 			return json_encode($response);
 		}
 
-		$response['error_code'] = 1005;
-		$response['error_message'] = '画像ファイルが指定されていません';
+		App::import ('Vendor', 'FileUpload');
+		$fileUpload = new FileUpload();
 		
+		// アップロード可能な拡張子とファイルサイズを指定
+		$upload_extensions = (array)Configure::read('upload_image_extensions');
+		$upload_maxsize = Configure::read('upload_image_maxsize');
+		
+		$fileUpload->setExtension($upload_extensions);
+		$fileUpload->setMaxSize($upload_maxsize);
+		$fileUpload->readFile($this->getParam('form')['file']); // ファイルの読み込み
+
+		$response = ['error_code' => 0, 'error_message' => ''];
+
+		$error_code = $fileUpload->checkFile();
+		
+		if($error_code > 0)
+		{
+			$response['error_code'] = $error_code;
+
+			switch($error_code)
+			{
+				case 1001 : // 拡張子エラー
+					$response['error_message'] = __('アップロードされたファイルの形式は許可されていません');
+					break;
+				case 1002 : // ファイルサイズが0
+				case 1003 : // ファイルサイズオバー
+					$size = $this->getParam('form')['file']['size'];
+					$response['error_message'] = __("アップロードされたファイルのサイズ（{$size}）は許可されていません");
+					break;
+				default :
+				$response['error_message'] = __("アップロード中にエラーが発生しました ({$error_code})");
+			}
+
+			return json_encode($response);
+		}
+		else
+		{
+				$str = substr(str_shuffle('abcdefghijkmnopqrstuvwxyz'), 0, 4);
+		
+			// ファイル名：YYYYMMDDHHNNSS形式＋ランダムな4桁の文字列＋"既存の拡張子"
+			$new_name = date('YmdHis').$str.$fileUpload->getExtension($fileUpload->getFileName());
+
+			$file_path = WWW_ROOT.'uploads'.DS.$new_name; // ファイルのパス
+			$file_url = Router::url('/uploads/'.$new_name, true); // ファイルのURL (https://xxxx 形式)
+
+			$result = $fileUpload->saveFile($file_path); // ファイルの保存
+			
+			if ($result)
+			{
+				// 画像のリサイズ処理
+				$this->resizeImage($file_path, 1024, 1024);
+				
+				$response['image_url'] = $file_url;
+			}
+			else
+			{
+				$response['error_code'] = 1004;
+			}
+		}
+		
+		// 画像のURLをJSON形式で出力
 		return json_encode($response);
 	}
 
@@ -162,7 +161,8 @@ class HomesController extends AppController
 	 * @param int $max_width 最大幅
 	 * @param int $max_height 最大高さ
 	 */
-	private function resizeImage($file_path, $max_width, $max_height) {
+	private function resizeImage($file_path, $max_width, $max_height)
+	{
 		list($width, $height, $type) = getimagesize($file_path);
 		
 		// アスペクト比を計算
