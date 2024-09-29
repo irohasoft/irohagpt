@@ -93,6 +93,18 @@ $(document).ready(function()
             uploadFiles(files);  // ファイルアップロード処理を呼び出し
     });
 
+    // ファイル選択時のイベントハンドラ
+    $('#ContentCamera').on('change', function(event)
+    {
+        event.stopPropagation();  // イベントの伝播を停止
+        event.preventDefault();   // デフォルトの動作を防止
+        
+        var files = event.target.files;  // 選択されたファイルを取得
+
+        if(files.length > 0)
+            uploadFiles(files);  // ファイルアップロード処理を呼び出し
+    });
+
     // 指定されたファイルをアップロード
     function uploadFiles(files)
     {        
