@@ -823,14 +823,16 @@ form .required .control-label:after
 	padding-top			: 5px;
 }
 
-.uploaded-image
+.uploaded-image,
+.stored-image
 {
 	max-width: 200px;
 	max-height: 200px;
 	margin-right: 10px;
 }
 
-.uploaded-images-container
+.uploaded-images-container,
+.stored-images-container
 {
 	display: flex;
     align-items: center;
@@ -838,7 +840,8 @@ form .required .control-label:after
     flex-wrap: wrap;
 }
 
-.uploaded-image-container
+.uploaded-image-container,
+.stored-image-container
 {
 	padding: 10px;
 }

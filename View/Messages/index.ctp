@@ -9,8 +9,8 @@
 	var IMAGE_UPLOAD_URL = '<?= Router::url(['controller' => 'homes', 'action' => 'upload_image'])?>';
 </script>
 <?php $this->end(); ?>
-<?= $this->Html->script('prompt.js?20240901');?>
-<?= $this->Html->script('messages.js?20240901'); ?>
+<?= $this->Html->script('prompt.js?20241001');?>
+<?= $this->Html->script('messages.js?20241001'); ?>
 <?php $this->start('css-embedded'); ?>
 <style>
 <?php if($this->isAdminPage()) { // 管理システムからの表示の場合、メニューを非表示 ?>
@@ -78,11 +78,6 @@
 			<?php } else {?>
 				<div class="stage">
 					<?php foreach ($messages as $message): ?>
-						<div class="alert alert-<?= ($message['Message']['role'] == 'user') ? 'success' : 'warning' ; ?> msg msg-<?= $message['Message']['role']; ?>"
-							 <?php if (!empty($message['Message']['image_urls'])): ?>
-							 data-image-url="<?= h($message['Message']['image_urls']); ?>"
-							 <?php endif; ?>><?= nl2br(h($message['Message']['message'])); ?>
-						</div>
 						<?php
 						$img_tag = '';
 
@@ -90,17 +85,21 @@
 						if($message['Message']['image_urls'])
 						{
 							$image_urls = json_decode($message['Message']['image_urls']);
-							$img_tag = '<div class="text-right">';
+							$img_tag = '<div class="stored-images-container">';
 
 							foreach ($image_urls as $image_url)
 							{
-								$img_tag .= '<img src ="'.h($image_url).'" class="uploaded-image"></div>';
+								$img_tag .= '<div class="stored-image-container"><img src ="'.h($image_url).'" class="stored-image"></div>';
 							}
 
 							$img_tag .= '</div>';
-					}
+						}
 						?>
-						<?= $img_tag ?>
+						<div class="alert alert-<?= ($message['Message']['role'] == 'user') ? 'success' : 'warning' ; ?> msg msg-<?= $message['Message']['role']; ?>"
+							 <?php if (!empty($message['Message']['image_urls'])): ?>
+							 data-image-url="<?= h($message['Message']['image_urls']); ?>"
+							 <?php endif; ?>><?= $img_tag ?><?= nl2br(h($message['Message']['message'])); ?><!--表示が崩れるため、出力結果に改行を追加しない-->
+						</div>
 						<?php if ($message['Message']['role'] == 'assistant') {?>
 						<div class="elapsed-time"><?= $message['Message']['elapsed_time'] ?>秒</div>
 						<?php }?>

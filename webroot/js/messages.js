@@ -35,7 +35,7 @@ function sendToAPI()
 	// ローディング画面を表示
 	showLoadingScreen();
 	
-	const content = getQuestion(); // 新しいメッセージ
+	const content = getPrompt(); // 新しいメッセージ
 	const messages = getMessages(); // 対話の履歴
 	
 	messages.push({role: 'user', content: content});
@@ -59,22 +59,22 @@ function sendToAPI()
 	}
 	else
 	{
-		$('.stage').append(
-			'<div class="alert alert-success msg msg-user">' + 
-			CU.getBrHTML(content[0]['text']) +
-			'</div>'
-		);
-
-		var imgTag = '<div style="text-align:right;">';
+		var imgTag = '<div class="stored-images-container">';
 
 		// 画像を追加
 		for(var i = 1; i < content.length; i++)
 		{
-			imgTag += '<div class="uploaded-image-container"><img src="' + content[i]['image_url']['url'] + '" alt="アップロードされた画像" class="uploaded-image">';
+			imgTag += '<div class="stored-image-container"><img src="' + content[i]['image_url']['url'] + '" class="stored-image"></div>';
 		}
 
 		imgTag += '</div>';
-		$('.stage').append(imgTag);
+		
+		$('.stage').append(
+			'<div class="alert alert-success msg msg-user">' + 
+			imgTag +
+			CU.getBrHTML(content[0]['text']) +
+			'</div>'
+		);
 	}
 
 
@@ -204,7 +204,7 @@ function updateTitle()
 }
 
 // メッセージを取得
-function getQuestion()
+function getPrompt()
 {
 	// メッセージ
 	let content = $('.text-message').val();
@@ -255,7 +255,8 @@ function getMessages()
 			var content = $(this).text();
 			var imageUrls = $(this).data('image-urls'); // 画像URLを取得
 
-			if (imageUrls) {
+			if(imageUrls)
+			{
 				// 画像URLが存在する場合、新しい形式でメッセージを追加
 				messages.push({
 					role: 'user',
@@ -272,11 +273,15 @@ function getMessages()
 						}
 					]
 				});
-			} else {
+			}
+			else
+			{
 				// 画像URLが存在しない場合、通常のテキストメッセージとして追加
 				messages.push({role: 'user', content: content});
 			}
-		} else {
+		}
+		else
+		{
 			messages.push({role: 'assistant', content: $(this).text()});
 		}
 	});
