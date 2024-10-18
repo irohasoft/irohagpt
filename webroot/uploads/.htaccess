@@ -1,8 +1,1 @@
 Options -Indexes
-
-<IfModule mod_rewrite.c>
-	RewriteEngine On
-	RewriteCond %{REQUEST_URI} ^.*
-	RewriteCond %{HTTP_COOKIE} !LoginStatus
-	RewriteRule . ../img/wrong.png [L]
-</IfModule>
