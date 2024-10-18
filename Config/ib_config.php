@@ -8,9 +8,10 @@
  * @license       https://www.gnu.org/licenses/gpl-3.0.en.html GPL License
  */
 
-$config['group_status']		= ['1' => '公開', '0' => '非公開'];
-$config['template_status']	= ['1' => '有効', '0' => '無効'];
+// グループのステータス
+$config['group_status'] = ['1' => '公開', '0' => '非公開'];
 
+// ユーザのロール
 $config['user_role'] = ['admin' => '管理者', 'user' => '利用者'];
 
 // select2 項目選択時の自動クローズの設定 (true ; 自動的にメニューを閉じる, false : 閉じない)
@@ -36,19 +37,23 @@ $config['form_defaults'] = [
 	'class' => 'form-horizontal'
 ];
 
+// フォームの送信ボタンのスタイル(BoostCake)の基本設定
 $config['form_submit_defaults'] = [
 	'div' => false,
 	'class' => 'btn btn-primary'
 ];
 
+// フォームの送信ボタンの前のHTML
 $config['form_submit_before'] = 
 	 '<div class="form-group">'
 	.'  <div class="col col-sm-9 col-sm-offset-3">';
 
+// フォームの送信ボタンの後のHTML
 $config['form_submit_after'] = 
 	 '  </div>'
 	.'</div>';
 
+// テーマカラー
 $config['theme_colors'] = [
 	'#31708f' => 'default',
 	'#003f8e' => 'ink blue',
@@ -72,9 +77,13 @@ $config['theme_colors'] = [
 	'#000000' => 'black'
 ];
 
+// インポート時のグループ数
 $config['import_group_count']  = 10;
 
+// ログイン画面に管理システムのログインリンクを表示するかどうか
 $config['show_admin_link'] = false;
+
+// リンクを同じウィンドウで開くかどうか
 $config['open_link_same_window'] = false;
 
 // webroot/index.php でアプリケーション名が設定されていない場合、ここで設定
@@ -82,8 +91,10 @@ if (!defined('APP_NAME')) {
 	define('APP_NAME', 'iroha Chat');
 }
 
+// プロンプトの最大文字数
 $config['prompt_max']  = 4000;
 
+// アップロード可能な画像の拡張子
 $config['upload_image_extensions'] = [
 	'.png',
 	'.gif',
