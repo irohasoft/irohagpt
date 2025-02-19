@@ -398,5 +398,42 @@ class ChatsController extends AppController
 
 		return $this->redirect(['controller' => 'homes', 'action' => 'index']);
 	}
+
+	public function index()
+	{
+		$user_id = $this->readAuthUser('id');
+		$keyword = $this->getQuery('keyword');
+		
+		$conditions = ['Chat.user_id' => $user_id];
+		
+		if ($keyword) {
+			$conditions['OR'] = [
+				'Chat.title LIKE' => '%' . $keyword . '%',
+				'Message.message LIKE' => '%' . $keyword . '%'
+			];
+		}
+		
+		// Paginatorの設定
+		$this->Paginator->settings = [
+			'conditions' => $conditions,
+			'joins' => [
+				[
+					'table' => 'messages',
+					'alias' => 'Message',
+					'type' => 'INNER',
+					'conditions' => [
+						'Chat.chat_key = Message.chat_key'
+					]
+				]
+			],
+			'order' => ['Chat.modified' => 'desc'],
+			'limit' => 10 // 1ページあたりの表示件数
+		];
+		
+		// ページネーションを実行
+		$chats = $this->Paginator->paginate('Chat');
+		
+		$this->set(compact('chats', 'keyword'));
+	}
 }
 

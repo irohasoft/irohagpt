@@ -8,7 +8,7 @@
 </script>
 <?php $this->end(); ?>
 <?= $this->Html->script('prompt.js?20240901');?>
-<?= $this->Html->script('homes.js?20240901');?>
+<?= $this->Html->script('homes.js?20241001');?>
 <div class="users-templates-index">
 	<div class="panel panel-success">
 		<div class="panel-heading"><?= __('お知らせ'); ?></div>
@@ -109,6 +109,20 @@
 			</form>
 			<hr>
 			<label><?= __('チャットの履歴'); ?></label>
+
+			<div class="search-box mb-3">
+				<?= $this->Form->create('Chats', [
+					'url' => ['controller' => 'chats', 'action' => 'index'],
+					'type' => 'get'
+				]); ?>
+				<div class="input-group">
+					<input name="keyword" class="form-control" placeholder="<?= __('チャットを検索'); ?>" type="text" id="ChatsKeyword">
+					<span class="input-group-btn">
+						<button class="btn btn-default" type="submit"><?= __('検索'); ?></button>
+					</span>
+				</div>
+				<?= $this->Form->end(); ?>
+			</div>
 
 			<ul class="list-group">
 				<?php foreach ($chats as $chat): ?>
