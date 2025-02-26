@@ -29,20 +29,22 @@
 </script>
 <?php $this->end(); ?>
 
-<div class="ib-breadcrumb">
-	<?php
-	$this->Html->addCrumb('<< '.__('ホーム'), [
-		'controller' => 'homes',
-		'action' => 'index'
-	]);
+<div class="breadcrumb">
+<?php
+$this->Html->addCrumb(
+	'<span class="glyphicon glyphicon-home" aria-hidden="true"></span> HOME',
+	['controller' => 'homes','action' => 'index'],
+	['escape' => false],
+);
 
-	$this->Html->addCrumb(__('テンプレート一覧'), [
-		'controller' => 'templates',
-		'action' => 'index'
-	]);
+$this->Html->addCrumb(
+	'<span class="glyphicon glyphicon-file" aria-hidden="true"></span> '.__('テンプレート一覧'),
+	['controller' => 'templates','action' => 'index'],
+	['escape' => false],
+);
 
-	echo $this->Html->getCrumbs(' / ');
-	?>
+echo $this->Html->getCrumbs(' / ');
+?>
 </div>
 
 <div class="admin-templates-index">

@@ -1,27 +1,46 @@
-<div class="admin-templates-edit">
+<div class="templates-edit">
+	<div class="breadcrumb">
 <?php
-// 利用者側
-$param = ['controller' => 'homes', 'action' => 'index'];
-
-// 管理者側
 if($this->isAdminPage())
 {
-	// マスターテンプレートの場合
+	$action = 'index';
+	
+	// 管理者側
 	if(
 		($this->action == 'admin_master')||
+		($this->action == 'admin_master_add')||
 		($this->action == 'admin_master_edit')
 	)
 	{
-		$param = ['action' => 'master'];
+		$action = 'master';
 	}
-	else
-	{
-		$param = ['action' => 'index'];
-	}
-}
+	
+	$this->Html->addCrumb(
+		__('<< 戻る'),
+		['controller' => 'templates','action' => $action],
+	);
 
+	echo $this->Html->getCrumbs(' / ');
+}
+else
+{
+	// 利用者側
+	$this->Html->addCrumb(
+		'<span class="glyphicon glyphicon-home" aria-hidden="true"></span> HOME',
+		['controller' => 'homes','action' => 'index'],
+		['escape' => false],
+	);
+
+	$this->Html->addCrumb(
+		'<span class="glyphicon glyphicon-file" aria-hidden="true"></span> '.__('テンプレート一覧'),
+		['controller' => 'templates','action' => 'index'],
+		['escape' => false],
+	);
+
+	echo $this->Html->getCrumbs(' / ');
+}
 ?>
-<?= $this->Html->link(__('<< 戻る'), $param)?>
+	</div>
 	<div class="panel panel-default">
 		<div class="panel-heading">
 			<?= $this->isEditPage() ? __('編集') :  __('新規テンプレート'); ?>

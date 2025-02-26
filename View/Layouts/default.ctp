@@ -77,35 +77,37 @@
 	</style>
 </head>
 <body>
-	<div class="header ib-theme-color">
+	<header class="header ib-theme-color">
 		<div class="ib-logo ib-left">
 			<a href="<?= $this->Html->url('/')?>"><?= h($this->readSession('Setting.title')); ?></a>
 		</div>
 		<?php if(isset($loginedUser)) {?>
-		<div class="ib-navi-item ib-right ib-navi-logout">
-			<span class="glyphicon glyphicon-log-out"></span>
-			<?= $this->Html->link(__('ログアウト'), ['controller' => 'users', 'action' => 'logout']); ?>
-		</div>
-		<div class="ib-navi-sepa ib-right ib-navi-sepa-1 "></div>
-		<div class="ib-navi-item ib-right ib-navi-setting">
-			<span class="glyphicon glyphicon-cog"></span>
-			<?= $this->Html->link(__('設定'), ['controller' => 'users', 'action' => 'setting']); ?>
-		</div>
-		<div class="ib-navi-sepa ib-right ib-navi-sepa-2"></div>
-		<div class="ib-navi-item ib-right ib-navi-welcome"><?= __('ようこそ').' '.h($loginedUser['name']).' '.__('さん'); ?></div>
+		<nav class="ib-navi">
+			<div class="ib-navi-item ib-right ib-navi-logout">
+				<span class="glyphicon glyphicon-log-out"></span>
+				<?= $this->Html->link(__('ログアウト'), ['controller' => 'users', 'action' => 'logout']); ?>
+			</div>
+			<div class="ib-navi-sepa ib-right ib-navi-sepa-1"></div>
+			<div class="ib-navi-item ib-right ib-navi-setting">
+				<span class="glyphicon glyphicon-cog"></span>
+				<?= $this->Html->link(__('設定'), ['controller' => 'users', 'action' => 'setting']); ?>
+			</div>
+			<div class="ib-navi-sepa ib-right ib-navi-sepa-2"></div>
+			<div class="ib-navi-item ib-right ib-navi-welcome"><?= __('ようこそ').' '.h($loginedUser['name']).' '.__('さん'); ?></div>
+		</nav>
 		<?php }?>
-	</div>
+	</header>
 	
-	<div id="container">
+	<main id="container">
 		<div id="content" class="row">
 			<?= $this->Session->flash(); ?>
 			<?= $this->fetch('content'); ?>
 		</div>
-	</div>
+	</main>
 	
-	<div class="footer ib-theme-color text-center">
+	<footer class="footer ib-theme-color text-center">
 		<?= h($this->readSession('Setting.copyright')); ?>
-	</div>
+	</footer>
 	
 	<?php if(isset($loginedUser)) {?>
 	<div class="irohasoft">

@@ -7,6 +7,6 @@
 改行する場合は、Shift+エンターキーを押下してください。
 ドラックアンドドロップで画像を指定することも可能です。"><?= $message?></textarea>
 </div>
-<button class="btn btn-default" id="btnSend"><span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span> <?=__('送信')?></button>
+<button class="btn btn-default pull-right" id="btnSend"><span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span> <?=__('送信')?></button>
 <button class="btn btn-default" id="btnImage"><span class="glyphicon glyphicon-picture" aria-hidden="true"></span> <?=__('画像')?></button>
 <button class="btn btn-default" id="btnCamera"><span class="glyphicon glyphicon-camera" aria-hidden="true"></span> <?=__('撮影')?></button>

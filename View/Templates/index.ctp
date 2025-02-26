@@ -53,25 +53,26 @@
 	});
 </script>
 <?php $this->end(); ?>
-<div class="ib-breadcrumb">
+<div class="breadcrumb">
 	<?php
-	$this->Html->addCrumb('<< '.__('ホーム'), [
-		'controller' => 'homes',
-		'action' => 'index'
-	]);
+	$this->Html->addCrumb(
+		'<span class="glyphicon glyphicon-home" aria-hidden="true"></span> HOME',
+		['controller' => 'homes','action' => 'index'],
+		['escape' => false],
+	);
 	echo $this->Html->getCrumbs(' / ');
 	?>
 </div>
 
 <div class="admin-templates-index">
 	<div class="panel panel-default">
-		<div class="panel-heading"><?= __('テンプレート一覧'); ?></div>
+		<div class="panel-heading"><span class="glyphicon glyphicon-file" aria-hidden="true"></span> <?= __('テンプレート一覧'); ?></div>
 		<div class="panel-body">
 			<div class="buttons_container">
 				<?php if($master_count > 0) {?>
-				<button type="button" class="btn btn-default" onclick="location.href='<?= Router::url(['action' => 'copy']) ?>'"><?= __('マスターテンプレートからコピー'); ?></button>
+				<button type="button" class="btn btn-default" onclick="location.href='<?= Router::url(['action' => 'copy']) ?>'"><span class="glyphicon glyphicon-copy" aria-hidden="true"></span> <?= __('マスターテンプレートからコピー'); ?></button>
 				<?php }?>
-				<button type="button" class="btn btn-primary btn-add" onclick="location.href='<?= Router::url(['action' => 'add']) ?>'">+ 追加</button>
+				<button type="button" class="btn btn-primary btn-add" onclick="location.href='<?= Router::url(['action' => 'add']) ?>'"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> 追加</button>
 			</div>
 
 			<?php if(count($templates) > 0) {?>

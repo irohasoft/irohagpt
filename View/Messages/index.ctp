@@ -27,15 +27,16 @@
 </style>
 <?php $this->end(); ?>
 <div class="messages-index">
-	<div class="ib-breadcrumb">
+	<div class="breadcrumb">
 	<?php
 	// 管理者によるチャット履歴表示の場合、パンくずリストを表示しない
 	if(!$this->isAdminPage())
 	{
-		$this->Html->addCrumb('<< '.__('ホーム'), [
-			'controller' => 'homes',
-			'action' => 'index'
-		]);
+		$this->Html->addCrumb(
+			'<span class="glyphicon glyphicon-home" aria-hidden="true"></span> HOME',
+			['controller' => 'homes','action' => 'index'],
+			['escape' => false],
+		);
 		echo $this->Html->getCrumbs(' / ');
 	}
 
@@ -107,6 +108,7 @@
 				</div>
 				<?php if(!$this->isAdminPage()) {?>
 				<button class="btn btn-default" onclick="continueToChat();">続けてください</button>
+				<hr>
 				<!--prompt.ctp-->
 				<?= $this->element('prompt', ['message' => '', 'image_urls' => '']);?>
 				<?php }?>

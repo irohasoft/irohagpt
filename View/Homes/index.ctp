@@ -11,7 +11,7 @@
 <?= $this->Html->script('homes.js?20241001');?>
 <div class="users-templates-index">
 	<div class="panel panel-success">
-		<div class="panel-heading"><?= __('お知らせ'); ?></div>
+		<div class="panel-heading"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> <?= __('お知らせ'); ?></div>
 		<div class="panel-body">
 			<?php if($info != ''){?>
 			<div class="well">
@@ -41,11 +41,11 @@
 		</div>
 	</div>
 	<div class="panel panel-info">
-		<div class="panel-heading"><?= __('チャット'); ?></div>
+		<div class="panel-heading"><span class="glyphicon glyphicon-comment" aria-hidden="true"></span> <?= __('チャット')?></div>
 		<div class="panel-body">
 			<form method="post" class="template-form">
 				<div class="panel well">
-					<label><?= __('テンプレート'); ?></label>
+					<label><span class="glyphicon glyphicon-file" aria-hidden="true"></span> <?= __('テンプレート'); ?></label>
 					<div class="horizontal">
 					<select class="form-control" id="TemplateId" name="template_id" onchange="changeTemplate($('#TemplateId').val());">
 						<option value=""><?= __('テンプレートを使用しない'); ?></option>
@@ -57,7 +57,7 @@
 					<!--
 					<button class="btn btn-primary" onclick="location.href='<?= Router::url(['controller' => 'messages', 'action' => 'index', Utils::getNewPassword(8)]);?>/' + $('#TemplateId').val()">+ 新規チャット</button>
 					-->
-					<button class="btn btn-default" onclick="location.href='<?= Router::url(['controller' => 'templates', 'action' => 'index']);?>'; return false;"><?= __('テンプレート管理'); ?></button>
+					<button class="btn btn-default" onclick="location.href='<?= Router::url(['controller' => 'templates', 'action' => 'index']);?>'; return false;"><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> <?= __('テンプレート管理'); ?></button>
 					</div>
 					<h5><?= __('よく使うテンプレート'); ?></h5>
 					<?php
@@ -83,7 +83,7 @@
 				</div>
 
 				<div class="panel panel-default">
-					<div class="panel-heading"><?= $title_newchat; ?></div>
+					<div class="panel-heading"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> <?= $title_newchat; ?></div>
 					<div class="panel-body">
 						<?php if(($template) && ($template['Template']['before_body'] != '')) {?>
 							<?php
@@ -108,7 +108,7 @@
 				</div>
 			</form>
 			<hr>
-			<label><?= __('チャットの履歴'); ?></label>
+			<label><span class="glyphicon glyphicon-list" aria-hidden="true"></span> <?= __('チャットの履歴'); ?></label>
 
 			<div class="search-box mb-3">
 				<?= $this->Form->create('Chats', [
@@ -118,7 +118,7 @@
 				<div class="input-group">
 					<input name="keyword" class="form-control" placeholder="<?= __('チャットを検索'); ?>" type="text" id="ChatsKeyword">
 					<span class="input-group-btn">
-						<button class="btn btn-default" type="submit"><?= __('検索'); ?></button>
+						<button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> <?= __('検索'); ?></button>
 					</span>
 				</div>
 				<?= $this->Form->end(); ?>
