@@ -1,10 +1,5 @@
 $(document).ready(function()
 {
-	$('.text-message').focus();
-
-	$('.text-message').keydown(textOnKeydown);
-	$('.control-text').keydown(textOnKeydown);
-
 	$('.list-group').pagination({
 		displayItemCount : 10,
 		itemElement : '> .list-group-item',
@@ -51,7 +46,6 @@ function sendToAPI()
 
 /**
  * テンプレートを変更し、フォームを送信
- * @param {string} template_id - 選択されたテンプレートのID
  */
 function changeTemplate(template_id)
 {
@@ -61,9 +55,8 @@ function changeTemplate(template_id)
 
 /**
  * チャットを開始
- * 注意: template_id変数がグローバルスコープで定義されていることを前提としています
  */
-function startChat()
+function startChat(template_id)
 {
 	$('#hidTemplateId').val(template_id);  // 隠しフィールドにテンプレートIDをセット
 	$('.template-form').submit();  // フォームを送信
